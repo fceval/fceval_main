@@ -1,0 +1,25 @@
+fuzzers:
+  - name: 'afl'
+    type:  1 
+  - name: 'fairfuzz'
+    type:  1     
+  - name: 'aflfast'
+    type:  1  
+  - name: 'symcc'
+    type:  1 
+    
+targets:
+  - name: 'objdump'
+    binary: 'objdump'
+    input: 'seeds/binutils/objdump'
+        
+experiment:
+    name: 'experiment1'
+    timeout: 86400
+    repeat: 1
+    output: 'out1'
+    use_collab: true
+    scheduler: 'htfuzzzxy'
+    experiment_id: 1
+
+   

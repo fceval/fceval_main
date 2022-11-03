@@ -1,0 +1,48 @@
+FROM ubuntu:16.04
+ENV GOPROXY='https://mirrors.aliyun.com/goproxy/' \ 
+    GO111MODULE=on \
+    DEBIAN_FRONTEND=noninteractive \
+    RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PIN_ROOT=/pin-3.7-97619-g0d0c92f4f-gcc-linux \
+    GOPATH=/go \
+    PATH=/clang+llvm/bin:/usr/local/cargo/bin:/angora/bin/:/go/bin:$PATH \
+    LD_LIBRARY_PATH=/clang+llvm/lib:$LD_LIBRARY_PATH
+    
+RUN (sed -i "s/security.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list)  &&\
+     apt-get update -y && \
+     apt-get install -y --reinstall ca-certificates && apt-get install -y git build-essential wget zlib1g-dev golang-go python-pip python-dev build-essential cmake git build-essential wget zlib1g-dev golang-go python-pip python-dev build-essential cmake libfl-dev libcap-dev  apt-transport-https libevent-dev ncurses-dev build-essential bison pkg-config automake autoconf tzdata && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && dpkg-reconfigure --frontend noninteractive tzdata && git clone https://github.com/AngoraFuzzer/Angora /angora
+COPY Angora/build /angora/build
+WORKDIR /angora
+RUN ./build/install_rust.sh
+RUN PREFIX=/ ./build/install_llvm.sh
+RUN ./build/install_tools.sh
+RUN ./build/build.sh
+#RUN ./build/install_pin_mode.sh
+
+RUN if [ -e "/usr/bin/clang" ]; then	\
+	rm /usr/bin/clang \
+    ;fi \
+&& if [ -e "/usr/bin/clang++" ]; then	\
+	rm /usr/bin/clang++ \
+    ;fi \
+&& if [ -e "/usr/bin/llvm-config" ]; then \
+	rm /usr/bin/llvm-config \
+    ;fi \
+&& ln -s /clang+llvm/bin/clang /usr/bin/clang && ln -s /clang+llvm/bin/clang++ /usr/bin/clang++ && ln -s /clang+llvm/bin/llvm-config /usr/bin/llvm-config
+
+WORKDIR  /work
+COPY --from=fuzzer-system  /work /work
+RUN mkdir /targets && tar xfv afl-2.56b.tar.gz && mv AFL-2.56b afl && cd afl &&  make -j`nproc` CC=clang CXX=clang++  && ./afl-clang --version && make install
+
+RUN git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure && make && make install
+
+
+
+
+
+
+
+
+
+

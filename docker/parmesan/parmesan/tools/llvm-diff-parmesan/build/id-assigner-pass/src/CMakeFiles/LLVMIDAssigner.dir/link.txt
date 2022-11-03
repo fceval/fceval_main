@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLLVMIDAssigner.a  CMakeFiles/LLVMIDAssigner.dir/IDAssigner.cpp.o
+/usr/bin/ranlib libLLVMIDAssigner.a

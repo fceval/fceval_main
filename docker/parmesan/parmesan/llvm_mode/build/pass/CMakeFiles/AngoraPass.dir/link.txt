@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG  -Wl,-znodelete -shared  -o libAngoraPass.so CMakeFiles/AngoraPass.dir/AngoraPass.cc.o   -L/clang+llvm/lib  -Wl,-rpath,/clang+llvm/lib: 

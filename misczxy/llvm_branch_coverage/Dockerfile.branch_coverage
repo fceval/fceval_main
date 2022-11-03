@@ -1,0 +1,22 @@
+FROM ubuntu:20.04
+RUN (sed -i "s/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list) && sed -i "s/mirrors.aliyun.com/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list   &&\
+    apt-get update -y \
+    && apt-get install -y wget make build-essential gcc clang libbfd-dev libunwind-dev libipt-dev binutils-dev git libtool libtool-bin automake bison libglib2.0-dev  cmake golang curl libc-ares-dev libfreetype6-dev libarchive-dev ragel bzip2 libgss-dev subversion libgcrypt-dev autoconf-archive virtualenv libdbus-glib-1-dev libgirepository1.0-dev libturbojpeg libssh-dev libssl-dev nasm libbz2-dev libxml2-dev
+ #bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+RUN apt-get install -y lsb-release wget software-properties-common
+#To install a specific version of LLVM:
+#wget https://apt.llvm.org/llvm.sh
+#chmod +x llvm.sh
+#./llvm.sh <version number>
+#To install all apt.llvm.org packages at once:
+
+
+WORKDIR /work
+RUN wget https://apt.llvm.org/llvm.sh
+RUN chmod +x llvm.sh
+RUN ./llvm.sh all
+RUN wget --no-check-certificate https://ftp.gnu.org/gnu/binutils/binutils-2.26.1.tar.gz  && tar xfv binutils-2.26.1.tar.gz
+RUN apt-get update && apt-get install -y texinfo libboost-all-dev
+COPY build_binutils_branch_coverage.sh build_binutils_coverage.sh
+RUN chmod a+x ./build_binutils_coverage.sh && ./build_binutils_coverage.sh
+

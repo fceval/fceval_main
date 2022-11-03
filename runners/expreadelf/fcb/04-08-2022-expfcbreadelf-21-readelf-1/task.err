@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-8/zhaoxy/casefs/runners/expreadelf/fcb/04-08-2022-expfcbreadelf-21-readelf-1
+INFO:runner.__main__:zxy father_path /home/rack12-8/zhaoxy/casefs/runners/expreadelf/fcb
+INFO:runner.__main__:zxy base_name fcb
+ERROR:runner.__main__:please make sure the parent directory is runners!

@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/kakaxdu/aaadev/casefs/runners/expimginfo_enfuzz/fca/08-08-2022-expfcaimginfo-4-imginfo-4
+INFO:runner.__main__:zxy father_path /home/kakaxdu/aaadev/casefs/runners/expimginfo_enfuzz/fca
+INFO:runner.__main__:zxy base_name fca
+ERROR:runner.__main__:please make sure the parent directory is runners!

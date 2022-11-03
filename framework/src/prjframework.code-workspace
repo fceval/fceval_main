@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "../../misczxy/testdataaflobjdump/dataall/_data/collab/out"
+		},
+		{
+			"path": "../../drivers/afl_generic/src/collabfuzz_generic_driver"
+		},
+		{
+			"path": "../../runners/runner"
+		},
+		{
+			"path": "../../misczxy/afl-2.56b"
+		},
+		{
+			"path": "../../../prjrust/testrust"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../aaadev/qsym/bin"
+		},
+		{
+			"path": "../../../aaadev/qsym/qsym"
+		}
+	],
+	"settings": {}
+}

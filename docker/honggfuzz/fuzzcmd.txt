@@ -1,0 +1,153 @@
+ Usage: honggfuzz [options] -- path_to_command [args]
+honggfuzz-0-exid0_1         | Options:
+honggfuzz-0-exid0_1         |  --help|-h 
+honggfuzz-0-exid0_1         | 	Help plz..
+honggfuzz-0-exid0_1         |  --input|-i VALUE
+honggfuzz-0-exid0_1         | 	Path to a directory containing initial file corpus
+honggfuzz-0-exid0_1         |  --output|-o VALUE
+honggfuzz-0-exid0_1         | 	Output data (new dynamic coverage corpus, or the minimized coverage corpus) is written to this directory (default: input directory is re-used)
+honggfuzz-0-exid0_1         |  --persistent|-P 
+honggfuzz-0-exid0_1         | 	Enable persistent fuzzing (use hfuzz_cc/hfuzz-clang to compile code). This will be auto-detected!!!
+honggfuzz-0-exid0_1         |  --instrument|-z 
+honggfuzz-0-exid0_1         | 	*DEFAULT-MODE-BY-DEFAULT* Enable compile-time instrumentation (use hfuzz_cc/hfuzz-clang to compile code)
+honggfuzz-0-exid0_1         |  --minimize|-M 
+honggfuzz-0-exid0_1         | 	Minimize the input corpus. It will most likely delete some corpus files (from the --input directory) if no --output is used!
+honggfuzz-0-exid0_1         |  --noinst|-x 
+honggfuzz-0-exid0_1         | 	Static mode only, disable any instrumentation (hw/sw) feedback
+honggfuzz-0-exid0_1         |  --keep_output|-Q 
+honggfuzz-0-exid0_1         | 	Don't close children's stdin, stdout, stderr; can be noisy
+honggfuzz-0-exid0_1         |  --timeout|-t VALUE
+honggfuzz-0-exid0_1         | 	Timeout in seconds (default: 1 (second))
+honggfuzz-0-exid0_1         |  --threads|-n VALUE
+honggfuzz-0-exid0_1         | 	Number of concurrent fuzzing threads (default: number of CPUs / 2)
+honggfuzz-0-exid0_1         |  --stdin_input|-s 
+honggfuzz-0-exid0_1         | 	Provide fuzzing input on STDIN, instead of ___FILE___
+honggfuzz-0-exid0_1         |  --mutations_per_run|-r VALUE
+honggfuzz-0-exid0_1         | 	Maximal number of mutations per one run (default: 6)
+honggfuzz-0-exid0_1         |  --logfile|-l VALUE
+honggfuzz-0-exid0_1         | 	Log file
+honggfuzz-0-exid0_1         |  --verbose|-v 
+honggfuzz-0-exid0_1         | 	Disable ANSI console; use simple log output
+honggfuzz-0-exid0_1         |  --verifier|-V 
+honggfuzz-0-exid0_1         | 	Enable crashes verifier
+honggfuzz-0-exid0_1         |  --debug|-d 
+honggfuzz-0-exid0_1         | 	Show debug messages (level >= 4)
+honggfuzz-0-exid0_1         |  --quiet|-q 
+honggfuzz-0-exid0_1         | 	Show only warnings and more serious messages (level <= 1)
+honggfuzz-0-exid0_1         |  --extension|-e VALUE
+honggfuzz-0-exid0_1         | 	Input file extension (e.g. 'swf'), (default: 'fuzz')
+honggfuzz-0-exid0_1         |  --workspace|-W VALUE
+honggfuzz-0-exid0_1         | 	Workspace directory to save crashes & runtime files (default: '.')
+honggfuzz-0-exid0_1         |  --crashdir VALUE
+honggfuzz-0-exid0_1         | 	Directory where crashes are saved to (default: workspace directory)
+honggfuzz-0-exid0_1         |  --covdir_all|-o VALUE
+honggfuzz-0-exid0_1         | 	** DEPRECATED ** use --output
+honggfuzz-0-exid0_1         |  --covdir_new VALUE
+honggfuzz-0-exid0_1         | 	New coverage (beyond the dry-run fuzzing phase) is written to this separate directory
+honggfuzz-0-exid0_1         |  --dict|-w VALUE
+honggfuzz-0-exid0_1         | 	Dictionary file. Format:http://llvm.org/docs/LibFuzzer.html#dictionaries
+honggfuzz-0-exid0_1         |  --stackhash_bl|-B VALUE
+honggfuzz-0-exid0_1         | 	Stackhashes blocklist file (one entry per line)
+honggfuzz-0-exid0_1         |  --mutate_cmd|-c VALUE
+honggfuzz-0-exid0_1         | 	External command producing fuzz files (instead of internal mutators)
+honggfuzz-0-exid0_1         |  --pprocess_cmd VALUE
+honggfuzz-0-exid0_1         | 	External command postprocessing files produced by internal mutators
+honggfuzz-0-exid0_1         |  --ffmutate_cmd VALUE
+honggfuzz-0-exid0_1         | 	External command mutating files which have effective coverage feedback
+honggfuzz-0-exid0_1         |  --run_time VALUE
+honggfuzz-0-exid0_1         | 	Number of seconds this fuzzing session will last (default: 0 [no limit])
+honggfuzz-0-exid0_1         |  --iterations|-N VALUE
+honggfuzz-0-exid0_1         | 	Number of fuzzing iterations (default: 0 [no limit])
+honggfuzz-0-exid0_1         |  --rlimit_as VALUE
+honggfuzz-0-exid0_1         | 	Per process RLIMIT_AS in MiB (default: 0 [default limit])
+honggfuzz-0-exid0_1         |  --rlimit_rss VALUE
+honggfuzz-0-exid0_1         | 	Per process RLIMIT_RSS in MiB (default: 0 [default limit]). It will also set *SAN's soft_rss_limit_mb
+honggfuzz-0-exid0_1         |  --rlimit_data VALUE
+honggfuzz-0-exid0_1         | 	Per process RLIMIT_DATA in MiB (default: 0 [default limit])
+honggfuzz-0-exid0_1         |  --rlimit_core VALUE
+honggfuzz-0-exid0_1         | 	Per process RLIMIT_CORE in MiB (default: 0 [no cores are produced])
+honggfuzz-0-exid0_1         |  --rlimit_stack VALUE
+honggfuzz-0-exid0_1         | 	Per process RLIMIT_STACK in MiB (default: 0 [default limit])
+honggfuzz-0-exid0_1         |  --report|-R VALUE
+honggfuzz-0-exid0_1         | 	Write report to this file (default: '<workdir>/HONGGFUZZ.REPORT.TXT')
+honggfuzz-0-exid0_1         |  --max_file_size|-F VALUE
+honggfuzz-0-exid0_1         | 	Maximal size of files processed by the fuzzer in bytes (default: 134217728 = 128MB)
+honggfuzz-0-exid0_1         |  --clear_env 
+honggfuzz-0-exid0_1         | 	Clear all environment variables before executing the binary
+honggfuzz-0-exid0_1         |  --env|-E VALUE
+honggfuzz-0-exid0_1         | 	Pass this environment variable, can be used multiple times
+honggfuzz-0-exid0_1         |  --save_all|-u 
+honggfuzz-0-exid0_1         | 	Save all test-cases (not only the unique ones) by appending the current time-stamp to the filenames
+honggfuzz-0-exid0_1         |  --save_smaller|-U 
+honggfuzz-0-exid0_1         | 	Save smaller test-cases, renaming first filename with .orig suffix
+honggfuzz-0-exid0_1         |  --tmout_sigvtalrm|-T 
+honggfuzz-0-exid0_1         | 	Treat time-outs as crashes - use SIGVTALRM to kill timeouting processes (default: use SIGKILL)
+honggfuzz-0-exid0_1         |  --sanitizers|-S 
+honggfuzz-0-exid0_1         | 	** DEPRECATED ** Enable sanitizers settings (default: false)
+honggfuzz-0-exid0_1         |  --sanitizers_del_report VALUE
+honggfuzz-0-exid0_1         | 	Delete sanitizer report after use (default: false)
+honggfuzz-0-exid0_1         |  --monitor_sigabrt VALUE
+honggfuzz-0-exid0_1         | 	** DEPRECATED ** SIGABRT is always monitored
+honggfuzz-0-exid0_1         |  --no_fb_timeout VALUE
+honggfuzz-0-exid0_1         | 	Skip feedback if the process has timeouted (default: false)
+honggfuzz-0-exid0_1         |  --exit_upon_crash 
+honggfuzz-0-exid0_1         | 	Exit upon seeing the first crash (default: false)
+honggfuzz-0-exid0_1         |  --socket_fuzzer 
+honggfuzz-0-exid0_1         | 	Instrument external fuzzer via socket
+honggfuzz-0-exid0_1         |  --netdriver 
+honggfuzz-0-exid0_1         | 	Use netdriver (libhfnetdriver/). In most cases it will be autodetected through a binary signature
+honggfuzz-0-exid0_1         |  --only_printable 
+honggfuzz-0-exid0_1         | 	Only generate printable inputs
+honggfuzz-0-exid0_1         |  --export_feedback 
+honggfuzz-0-exid0_1         | 	Export the coverage feedback structure as ./hfuzz-feedback
+honggfuzz-0-exid0_1         |  --const_feedback VALUE
+honggfuzz-0-exid0_1         | 	Use constant integer/string values from fuzzed programs to mangle input files via a dynamic dictionary (default: true)
+honggfuzz-0-exid0_1         |  --linux_symbols_bl VALUE
+honggfuzz-0-exid0_1         | 	Symbols blocklist filter file (one entry per line)
+honggfuzz-0-exid0_1         |  --linux_symbols_wl VALUE
+honggfuzz-0-exid0_1         | 	Symbols allowlist filter file (one entry per line)
+honggfuzz-0-exid0_1         |  --linux_symbols_al VALUE
+honggfuzz-0-exid0_1         | 	Symbols allowlist filter file (one entry per line)
+honggfuzz-0-exid0_1         |  --linux_addr_low_limit VALUE
+honggfuzz-0-exid0_1         | 	Address limit (from si.si_addr) below which crashes are not reported, (default: 0)
+honggfuzz-0-exid0_1         |  --linux_keep_aslr 
+honggfuzz-0-exid0_1         | 	Don't disable ASLR randomization, might be useful with MSAN
+honggfuzz-0-exid0_1         |  --linux_perf_ignore_above VALUE
+honggfuzz-0-exid0_1         | 	Ignore perf events which report IPs above this address
+honggfuzz-0-exid0_1         |  --linux_perf_instr 
+honggfuzz-0-exid0_1         | 	Use PERF_COUNT_HW_INSTRUCTIONS perf
+honggfuzz-0-exid0_1         |  --linux_perf_branch 
+honggfuzz-0-exid0_1         | 	Use PERF_COUNT_HW_BRANCH_INSTRUCTIONS perf
+honggfuzz-0-exid0_1         |  --linux_perf_bts_edge 
+honggfuzz-0-exid0_1         | 	Use Intel BTS to count unique edges
+honggfuzz-0-exid0_1         |  --linux_perf_ipt_block 
+honggfuzz-0-exid0_1         | 	Use Intel Processor Trace to count unique blocks (requires libipt.so)
+honggfuzz-0-exid0_1         |  --linux_perf_kernel_only 
+honggfuzz-0-exid0_1         | 	Gather kernel-only coverage with Intel PT and with Intel BTS
+honggfuzz-0-exid0_1         |  --linux_ns_net VALUE
+honggfuzz-0-exid0_1         | 	Use Linux NET namespace isolation (yes/no/maybe [default:no])
+honggfuzz-0-exid0_1         |  --linux_ns_pid 
+honggfuzz-0-exid0_1         | 	Use Linux PID namespace isolation
+honggfuzz-0-exid0_1         |  --linux_ns_ipc 
+honggfuzz-0-exid0_1         | 	Use Linux IPC namespace isolation
+honggfuzz-0-exid0_1         | 
+honggfuzz-0-exid0_1         | Examples:
+honggfuzz-0-exid0_1         |  Run the binary over a mutated file chosen from the directory. Disable fuzzing feedback (static mode):
+honggfuzz-0-exid0_1         |   honggfuzz -i input_dir -x -- /usr/bin/djpeg ___FILE___
+honggfuzz-0-exid0_1         |  As above, provide input over STDIN:
+honggfuzz-0-exid0_1         |   honggfuzz -i input_dir -x -s -- /usr/bin/djpeg
+honggfuzz-0-exid0_1         |  Use compile-time instrumentation (-fsanitize-coverage=trace-pc-guard,...):
+honggfuzz-0-exid0_1         |   honggfuzz -i input_dir -- /usr/bin/djpeg ___FILE___
+honggfuzz-0-exid0_1         |  Use persistent mode w/o instrumentation:
+honggfuzz-0-exid0_1         |   honggfuzz -i input_dir -P -x -- /usr/bin/djpeg_persistent_mode
+honggfuzz-0-exid0_1         |  Use persistent mode and compile-time (-fsanitize-coverage=trace-pc-guard,...) instrumentation:
+honggfuzz-0-exid0_1         |   honggfuzz -i input_dir -P -- /usr/bin/djpeg_persistent_mode
+honggfuzz-0-exid0_1         |  Run the binary with dynamically generate inputs, maximize total no. of instructions:
+honggfuzz-0-exid0_1         |   honggfuzz --linux_perf_instr -- /usr/bin/djpeg ___FILE___
+honggfuzz-0-exid0_1         |  As above, maximize total no. of branches:
+honggfuzz-0-exid0_1         |   honggfuzz --linux_perf_branch -- /usr/bin/djpeg ___FILE___
+honggfuzz-0-exid0_1         |  As above, maximize unique branches (edges) via Intel BTS:
+honggfuzz-0-exid0_1         |   honggfuzz --linux_perf_bts_edge -- /usr/bin/djpeg ___FILE___
+honggfuzz-0-exid0_1         |  As above, maximize unique code blocks via Intel Processor Trace (requires libipt.so):
+honggfuzz-0-exid0_1         |   honggfuzz --linux_perf_ipt_block -- /usr/bin/djpeg ___FILE___
+

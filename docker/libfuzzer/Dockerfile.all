@@ -1,0 +1,27 @@
+FROM fuzzer-system
+# support apt mirror selection for faster build
+# you can build with --build-arg APT=mirrors.aliyun.com
+ARG APT=mirrors.aliyun.com
+
+SHELL ["/bin/bash", "-c"]
+
+# install proper tools
+RUN ([ "$APT" == "" ] || (sed -i "s/security.ubuntu.com/$APT/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/$APT/g" /etc/apt/sources.list) ) && apt-get update && apt-get install -y build-essential python2.7-dev libarchive-dev libglib2.0 libgss3 && rm -rf /work
+
+#WORKDIR /work
+#RUN useradd -ms /bin/bash coll && rm -rf /work
+#ENV DEBIAN_FRONTEND=noninteractive
+
+
+
+COPY --from=fuzzer-libfuzzer:binutils /targets/binutils /targets/binutils
+COPY --from=fuzzer-libfuzzer:lava /targets/libfuzzer-lava /targets/lava
+
+#COPY --from=fuzzer-libfuzzer:putone /targets/afl-putone /targets/putone
+
+#RUN apt-get update && apt-get install -y libarchive-dev libglib2.0 libgss3
+COPY --from=fuzzer-libfuzzer:google /targets/google /targets/google
+
+RUN rm -rf /work
+
+

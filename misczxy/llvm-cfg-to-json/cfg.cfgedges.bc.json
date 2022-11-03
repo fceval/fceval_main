@@ -1,0 +1,169 @@
+{
+	"functions" : 
+	[
+		{
+			"blocks" : 
+			{
+				"%2" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				}
+			},
+			"calls" : 
+			[
+				{
+					"dst" : "printf",
+					"src" : "%2",
+					"type" : "call"
+				}
+			],
+			"edges" : null,
+			"entry" : "%2",
+			"name" : "sum",
+			"returns" : 
+			[
+				{
+					"block" : "%2",
+					"type" : "ret"
+				}
+			],
+			"unresolved_calls" : null
+		},
+		{
+			"blocks" : 
+			{
+				"%2" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				}
+			},
+			"calls" : 
+			[
+				{
+					"dst" : "printf",
+					"src" : "%2",
+					"type" : "call"
+				}
+			],
+			"edges" : null,
+			"entry" : "%2",
+			"name" : "sub",
+			"returns" : 
+			[
+				{
+					"block" : "%2",
+					"type" : "ret"
+				}
+			],
+			"unresolved_calls" : null
+		},
+		{
+			"blocks" : 
+			{
+				"%10" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				},
+				"%2" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				},
+				"%4" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				},
+				"%7" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				}
+			},
+			"calls" : 
+			[
+				{
+					"dst" : "printf",
+					"src" : "%7",
+					"type" : "call"
+				},
+				{
+					"dst" : "printf",
+					"src" : "%4",
+					"type" : "call"
+				}
+			],
+			"edges" : 
+			[
+				{
+					"dst" : "%4",
+					"src" : "%2",
+					"type" : "br"
+				},
+				{
+					"dst" : "%7",
+					"src" : "%2",
+					"type" : "br"
+				},
+				{
+					"dst" : "%10",
+					"src" : "%7",
+					"type" : "br"
+				},
+				{
+					"dst" : "%10",
+					"src" : "%4",
+					"type" : "br"
+				}
+			],
+			"entry" : "%2",
+			"name" : "tiao",
+			"returns" : 
+			[
+				{
+					"block" : "%10",
+					"type" : "ret"
+				}
+			],
+			"unresolved_calls" : null
+		},
+		{
+			"blocks" : 
+			{
+				"%0" : 
+				{
+					"end_line" : null,
+					"start_line" : null
+				}
+			},
+			"calls" : 
+			[
+				{
+					"dst" : "printf",
+					"src" : "%0",
+					"type" : "call"
+				},
+				{
+					"dst" : "printf",
+					"src" : "%0",
+					"type" : "call"
+				}
+			],
+			"edges" : [],
+			"entry" : "%0",
+			"name" : "main",
+			"returns" : 
+			[
+				{
+					"block" : "%0",
+					"type" : "ret"
+				}
+			],
+			"unresolved_calls" : null
+		}
+	],
+	"module" : "cfgedges.bc"
+}

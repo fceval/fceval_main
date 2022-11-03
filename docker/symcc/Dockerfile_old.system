@@ -1,0 +1,153 @@
+# This file is part of SymCC.
+#
+# SymCC is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# SymCC is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# SymCC. If not, see <https://www.gnu.org/licenses/>.
+
+#
+# The build stage
+#
+FROM ubuntu:20.04
+
+#ARG APT=mirrors.aliyun.com
+# WORKDIR  /work
+
+ENV  CC=clang CXX=clang++  
+
+# Install dependencies
+RUN (sed -i "s/security.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list)  &&\ 
+    apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        cargo \
+        clang-10 \
+        cmake \
+        g++ \
+        git \
+        libz3-dev \
+        llvm-10-dev \
+        llvm-10-tools \
+        ninja-build \
+        python2 \
+        python3-pip \
+        zlib1g-dev \
+        build-essential \
+        python2.7-dev \
+        sudo \
+        libevent-dev ncurses-dev build-essential bison pkg-config \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install lit \
+    && if [ -e "/usr/bin/clang" ]; then	\
+	rm /usr/bin/clang \
+    ;fi \
+    && if [ -e "/usr/bin/clang++" ]; then	\
+	rm /usr/bin/clang++ \
+    ;fi \
+    && if [ -e "/usr/bin/llvm-config" ]; then \
+	rm /usr/bin/llvm-config \
+    ;fi \
+    && ln -s /usr/bin/clang-10 /usr/bin/clang && ln -s /usr/bin/clang++-10 /usr/bin/clang++ && ln -s /usr/bin/llvm-config-10 /usr/bin/llvm-config \
+    && mkdir /targets
+
+    
+#RUN rm /usr/bin/clang && rm /usr/bin/clang++ && rm /usr/bin/llvm-config
+#RUN ln -s /usr/bin/clang-10 /usr/bin/clang && ln -s /usr/bin/clang++-10 /usr/bin/clang++ && ln -s /usr/bin/llvm-config-10 /usr/bin/llvm-config
+
+# Build AFL.
+
+WORKDIR /work
+
+#zhaoxy modify from llvmorg-10.0.1 to llvmorg-12.0.1
+COPY --from=fuzzer-system  /work /work
+RUN tar xfv afl-2.56b.tar.gz && mv AFL-2.56b afl && cd afl &&  make -j`nproc`   && cd llvm_mode &&   make -j`nproc`   CC=clang CXX=clang++  && cd ../ && ls && ./afl-clang --version && make install \
+&& cd /work && git clone https://github.com/Z3Prover/z3 && cd z3 && mkdir build && cd build && cmake -G "Ninja" ../ && ninja \
+&& git clone -b llvmorg-12.0.1 --depth 1 https://github.com/llvm/llvm-project.git /llvm_source \
+&& git clone https://github.com/eurecom-s3/symcc /symcc_source
+
+#RUN git clone https://github.com/Z3Prover/z3 && cd z3 && mkdir build && cd build && cmake -G "Ninja" ../ && ninja
+
+
+# Download the LLVM sources already so that we don't need to get them again when
+# SymCC changes
+#RUN git clone -b llvmorg-12.0.1 --depth 1 https://github.com/llvm/llvm-project.git /llvm_source
+
+
+# Build a version of SymCC with the simple backend to compile libc++
+COPY . /symcc_source
+
+
+# Init submodules if they are not initialiazed yet
+WORKDIR /symcc_source
+RUN git submodule init && git submodule update \
+&& if git submodule status | grep "^-">/dev/null ; then \
+    echo "Initializing submodules"; \
+    git submodule init; \
+    git submodule update; \
+    fi
+
+WORKDIR /symcc_build_simple
+RUN cmake -G Ninja \
+        -DQSYM_BACKEND=OFF \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DZ3_TRUST_SYSTEM_VERSION=on \
+        /symcc_source \
+    && ninja check
+
+# Build SymCC with the Qsym backend
+WORKDIR /symcc_build
+RUN cmake -G Ninja \
+        -DQSYM_BACKEND=ON \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        -DZ3_TRUST_SYSTEM_VERSION=on \
+        -DLLVM_DIR=/usr/lib/llvm-10/cmake \
+        -DZ3_DIR=/work/z3/build \
+        /symcc_source \
+    && ninja check \
+    && cargo install --path /symcc_source/util/symcc_fuzzing_helper
+
+# Build libc++ with SymCC using the simple backend
+WORKDIR /libcxx_symcc
+ENV SYMCC_REGULAR_LIBCXX=yes SYMCC_NO_SYMBOLIC_INPUT=yes PATH=/symcc_build:$PATH AFL_PATH=/work/afl AFL_CC=clang-10 AFL_CXX=clang++-10 SYMCC_LIBCXX_PATH=/libcxx_symcc_install
+RUN mkdir /libcxx_symcc_build \
+    && cd /libcxx_symcc_build \
+    && cmake -G Ninja /llvm_source/llvm \
+         -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi" \
+         -DLLVM_TARGETS_TO_BUILD="X86" \
+         -DLLVM_DISTRIBUTION_COMPONENTS="cxx;cxxabi;cxx-headers" \
+         -DCMAKE_BUILD_TYPE=Release \
+         -DCMAKE_INSTALL_PREFIX=/libcxx_symcc_install \
+         -DCMAKE_C_COMPILER=/symcc_build_simple/symcc \
+         -DCMAKE_CXX_COMPILER=/symcc_build_simple/sym++ \
+    && ninja distribution \
+    && ninja install-distribution \
+    && cp  /root/.cargo/bin/symcc_fuzzing_helper /symcc_build/
+#RUN cp  /root/.cargo/bin/symcc_fuzzing_helper /symcc_build/
+COPY   util/pure_concolic_execution.sh /symcc_build/
+
+
+WORKDIR /work
+ 
+
+RUN git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure && make && make install
+    
+RUN if [ -e "/usr/bin/clang" ]; then	\
+	rm /usr/bin/clang \
+    ;fi \
+&& if [ -e "/usr/bin/clang++" ]; then	\
+	rm /usr/bin/clang++ \
+    ;fi \
+&& if [ -e "/usr/bin/llvm-config" ]; then \
+	rm /usr/bin/llvm-config \
+    ;fi \
+&& ln -s /usr/bin/clang-10 /usr/bin/clang && ln -s /usr/bin/clang++-10 /usr/bin/clang++ && ln -s /usr/bin/llvm-config-10 /usr/bin/llvm-config && mkdir /tmp/output
+
+#RUN rm -rf /work/z3 && rm -rf  /llvm_source && rm -rf /symcc_source
+
+

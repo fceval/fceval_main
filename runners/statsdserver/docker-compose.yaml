@@ -1,0 +1,48 @@
+networks:
+  network_statsd_zxy:
+    ipam:
+      config:
+      - gateway: 172.24.0.1
+        subnet: 172.24.0.0/16
+services:
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.0.4
+    ports:
+    - 3000:3000
+    restart: unless-stopped
+
+  prometheus:
+    command:
+    - --config.file=/prometheus.yml
+    container_name: prometheus
+    image: prom/prometheus
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.0.2
+    ports:
+    - 9090:9090
+    restart: unless-stopped
+    volumes:
+    - ./prometheus.yml:/prometheus.yml
+  statsd_exporter:
+    command:
+    - --statsd.mapping-config=/statsd_mapping.yml
+    container_name: statsd_exporter
+    image: fuzzer-statsd-exporter-zxy
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.0.3
+    ports:
+    - 9102:9102/tcp
+    - 8125:9125/udp
+    restart: unless-stopped
+    volumes:
+    - ./statsd_mapping.yml:/statsd_mapping.yml
+
+version: '2'
+volumes:
+  data-vol: {}

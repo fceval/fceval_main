@@ -1,0 +1,170 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  afl-0-exid21:
+    depends_on:
+    - framework-exid21
+    - driver-afl-0-exid21
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: afl-0-exid21
+      OUTPUT_DIR: /data/afl-0-exid21
+    image: fuzzer-afl-exiv2
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.14
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/exiv2:/in
+  aflfast-0-exid21:
+    depends_on:
+    - framework-exid21
+    - driver-aflfast-0-exid21
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflfast-0-exid21
+      OUTPUT_DIR: /data/aflfast-0-exid21
+    image: fuzzer-aflfast-exiv2
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.16
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/exiv2:/in
+  aflplusplus-0-exid21:
+    depends_on:
+    - framework-exid21
+    - driver-aflplusplus-0-exid21
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflplusplus-0-exid21
+      OUTPUT_DIR: /data/aflplusplus-0-exid21
+    image: fuzzer-aflplusplus-exiv2
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/exiv2:/in
+  driver-afl-0-exid21:
+    depends_on:
+    - framework-exid21
+    environment:
+      ARG: /targets/unibench/exiv2 @@
+      FUZZER_NAME: afl-0-exid21
+      FUZZER_TYPE: afl
+      OUTPUT_DIR: /data/afl-0-exid21/
+      URI_CONTROL: tcp://framework-exid21:3001
+      URI_LISTENER: tcp://framework-exid21:3000
+      URI_SCHEDULER: tcp://framework-exid21:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid21
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.15
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-aflfast-0-exid21:
+    depends_on:
+    - framework-exid21
+    environment:
+      ARG: /targets/unibench/exiv2 @@
+      FUZZER_NAME: aflfast-0-exid21
+      FUZZER_TYPE: aflfast
+      OUTPUT_DIR: /data/aflfast-0-exid21/
+      URI_CONTROL: tcp://framework-exid21:3001
+      URI_LISTENER: tcp://framework-exid21:3000
+      URI_SCHEDULER: tcp://framework-exid21:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid21
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.17
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-aflplusplus-0-exid21:
+    depends_on:
+    - framework-exid21
+    environment:
+      ARG: /targets/unibench/exiv2 @@
+      FUZZER_NAME: aflplusplus-0-exid21
+      FUZZER_TYPE: aflplusplus
+      OUTPUT_DIR: /data/aflplusplus-0-exid21/
+      URI_CONTROL: tcp://framework-exid21:3001
+      URI_LISTENER: tcp://framework-exid21:3000
+      URI_SCHEDULER: tcp://framework-exid21:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid21
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-fairfuzz-0-exid21:
+    depends_on:
+    - framework-exid21
+    environment:
+      ARG: /targets/unibench/exiv2 @@
+      FUZZER_NAME: fairfuzz-0-exid21
+      FUZZER_TYPE: fairfuzz
+      OUTPUT_DIR: /data/fairfuzz-0-exid21/
+      URI_CONTROL: tcp://framework-exid21:3001
+      URI_LISTENER: tcp://framework-exid21:3000
+      URI_SCHEDULER: tcp://framework-exid21:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid21
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.19
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  fairfuzz-0-exid21:
+    depends_on:
+    - framework-exid21
+    - driver-fairfuzz-0-exid21
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: fairfuzz-0-exid21
+      OUTPUT_DIR: /data/fairfuzz-0-exid21
+    image: fuzzer-fairfuzz-exiv2
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.18
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/exiv2:/in
+  framework-exid21:
+    environment:
+      ANALYSIS_BIN_DIR: /work/analysis_binaries/exiv2.analysis_binaries/
+      ARG: '@@'
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: casefc
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.21.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/exiv2:/in
+version: '2'
+volumes:
+  data-vol: {}

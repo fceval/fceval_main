@@ -1,0 +1,31 @@
+FROM fuzzer-system:symcc
+
+ENV CC=clang
+ENV CXX=clang++
+
+WORKDIR  /work
+# build fuzzer-test-suite
+#RUN wget http://releases.llvm.org/9.0.0/compiler-rt-9.0.0.src.tar.xz -O compiler-rt.tar.xz && ls -lah && tar xfv compiler-rt.tar.xz
+RUN git clone https://github.com/google/fuzzer-test-suite.git && cd fuzzer-test-suite && git checkout b2e885706d6
+# build fuzzer-test-suite
+RUN apt-get update  && apt-get install -y rsync libarchive-dev  libbz2-dev libxml2-dev libssl-dev liblzma-dev nasm  libgcrypt-dev libbfd-dev libunwind-dev binutils-dev git libtool libtool-bin automake bison libglib2.0-dev python3 python3-pip wget cmake curl libc-ares-dev libfreetype6-dev libarchive-dev ragel bzip2 libgss-dev subversion libgcrypt-dev autoconf-archive virtualenv libdbus-glib-1-dev libgirepository1.0-dev libturbojpeg libssh-dev libssl-dev nasm libbz2-dev libxml2-dev software-properties-common libacl1-dev liblzma-dev
+
+
+#RUN rm -rf fuzzer-test-suite && git clone https://github.com/google/fuzzer-test-suite.git && cd fuzzer-test-suite && git checkout b2e885706d6
+COPY fuzzer-test-suite fuzzer-test-suite
+COPY google-cxxflags.patch fuzzer-test-suite/
+COPY build.sh fuzzer-test-suite/build.sh
+RUN  cd fuzzer-test-suite && git apply google-cxxflags.patch
+ 
+RUN mkdir build-test-suite-symcc && wget https://github.com/AdaLogics/adacc/blob/master/examples/libfuzz-harness-proxy.c --no-check-certificate && export SYMCC_PC=1 && symcc -c ./libfuzz-harness-proxy.c -o /libfuzzer-harness.o
+COPY build_fuzzer_test_suite_symcc.py build-test-suite/build_fuzzer_test_suite_symcc.py
+RUN cd build-test-suite-symcc  && python3 build_fuzzer_test_suite_symcc.py
+
+#RUN mkdir build-test-suite-afl
+#COPY build_fuzzer_test_suite_afl.py build-test-suite-afl/build_fuzzer_test_suite_afl.py
+#RUN cd build-test-suite-afl && python3 build_fuzzer_test_suite_afl.py
+RUN mkdir /targets/symcc-google/symcc && mkdir /targets/symcc-google/afl && find build-test-suite-symcc -name "*-coverage" -executable | xargs cp -t  /targets/symcc-google/symcc/ &&  rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-symcc/RUNDIR-* /targets/symcc-google/symcc/
+
+COPY  --from=fuzzer-afl /targets/google/asan /targets/symcc-google/afl
+
+#&&  find build-test-suite-afl -name "*-afl" -executable | xargs cp -t  /targets/symcc-google/afl/ &&  rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-afl/RUNDIR-* /targets/symcc-google/afl/

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libZlibRt.a  CMakeFiles/ZlibRt.dir/zlib_func.c.o
+/usr/bin/ranlib libZlibRt.a

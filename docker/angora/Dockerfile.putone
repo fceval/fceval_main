@@ -1,0 +1,13 @@
+FROM fuzzer-system:angora
+
+
+
+# build binutils 
+WORKDIR  /work
+RUN mkdir -p /targets/angora-putone/afl && mkdir -p /targets/angora-putone/fast && mkdir -p /targets/angora-putone/track && apt-get update && apt-get install -y zip flex bison
+
+# build angora fast bins
+COPY  --from=fuzzer-afl /targets/putone /targets/angora-putone/afl
+COPY build_putone.sh build_putone.sh
+RUN FORCE_UNSAFE_CONFIGURE=1 ./build_putone.sh
+

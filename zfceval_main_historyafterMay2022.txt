@@ -1,0 +1,505 @@
+commit e29f331bb141fa25754218bf4129b6d6686b5b23
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon Sep 19 07:24:55 2022 +0800
+
+    solve the panic of framework for fuzzing the program ld
+
+commit 3a2784e553b116ffa3e7180b063ddc225bfbcace
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Sep 13 17:06:24 2022 +0800
+
+    go version;fuzzer_coverage_analysis panic when testing ld
+
+commit 789862eb8eb6ce7c692aa8fc81a44f14c7aa3bb0
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat Aug 20 11:10:30 2022 +0800
+
+    ld libpng
+
+commit 003c4174171f4ceeaf969c0293f747de1a5b3eb5
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Aug 9 14:52:02 2022 +0800
+
+    add unibench/imginfo
+
+commit ce6b0b9d2ed2b9388c5ec35a4b44af355066c180
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun Aug 7 10:49:14 2022 +0800
+
+    experiment setting
+
+commit 12a044ec9281227c55f3858d787c961e65cbcb4d
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat Aug 6 22:35:40 2022 +0800
+
+    exiv25
+
+commit e568d95ed8015268e56d4061b1eede125bbba615
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Aug 4 19:50:05 2022 +0800
+
+    magma bins added for fuzzers
+
+commit bc5f3b18b955471d1698ba1b34138133430ba728
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Aug 4 11:16:25 2022 +0800
+
+    unibench experiments
+
+commit 2e226f2185a2105970a04aa190d3d37fd23fb235
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed Aug 3 07:09:24 2022 +0800
+
+    fuzer docker timezone settings
+
+commit 7e69598391a2fb06a9de4298b8c7ce55a2290a6e
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Aug 2 11:02:09 2022 +0800
+
+    unibench&fairfuzz:framework,fuzzers,experiments,seeds
+
+commit dd251a3c266d5d08f871d9c1b8f06e0f38bdf3c3
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat Jul 30 10:33:11 2022 +0800
+
+    mopt magma runtime libraries
+
+commit 02fbc7e760dde2e88c43a7acc2507653d0fb14f7
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Jul 28 14:57:16 2022 +0800
+
+    experiments review
+
+commit 3692f330a5cbb1917b88ddbeeb63b3f6c83b49cf
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Jul 28 14:38:06 2022 +0800
+
+    experiment setting on seeds and ips
+
+commit 126a8ae6382d1945d37e40aa040656551d2e5e27
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed Jul 27 19:47:11 2022 +0800
+
+    framework with magma benchmarks
+
+commit 4db18a449323e73514d4c34c8bfc1de9ca705454
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Jul 26 17:31:28 2022 +0800
+
+    experiment setting for new benchmarks and fuzzers
+
+commit a3819ffc42ca75f470fbf957d6b642f442a0c148
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Jul 26 16:02:03 2022 +0800
+
+    fuzzer build script
+
+commit 9900b840bd9c669c5a9db5c6f74dbaa8dbced345
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Jul 26 15:01:37 2022 +0800
+
+    add fuzzer:moptafl_asan
+
+commit ff26b7309bebe699a327531fd609a698dd2a769e
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon Jul 25 09:24:03 2022 +0800
+
+    scripts for building fuzzers from magma
+
+commit 7692ca785fc66f54ebb23e48a824f18053f5b7bc
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun Jul 24 21:47:24 2022 +0800
+
+    script for building fceval
+
+commit 133965517e82ce430905bc470814210bd6f7f0da
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun Jul 24 15:47:14 2022 +0800
+
+    review benchmarks and fuzzers from magma
+
+commit d453f8b4ffbc049a60aa0b86f8b69760ffd871f9
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun Jul 10 07:20:32 2022 +0800
+
+    afl fuzzbench bins
+
+commit 976b73c6b2c69ee13e4e8fd43a948bcef0450724
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed Jun 29 08:50:50 2022 +0800
+
+    fuzzer-coverage log for enfuzz policy
+
+commit 488e95c5593f63fc4f5ae05144bbf8434d850053
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 24 16:36:22 2022 +0800
+
+    angr to analysis CFG of different binaries
+
+commit 516bc91a94aad7dc955a6053e7f41b5909054581
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon Jun 20 19:07:00 2022 +0800
+
+    exp enfuzz policy
+
+commit 947e6186e1b9e9787de2091226376ac907de11be
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 17 15:24:37 2022 +0800
+
+    lavam
+
+commit c7f025d3ae2b8a7aa832abc7dfe2682f80e62ddd
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 17 10:47:26 2022 +0800
+
+    expbase64
+
+commit 183255df3ad5995c93b1150ee4be59d6461b3802
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 17 10:28:50 2022 +0800
+
+    lavam experiment
+
+commit b2958cbb420ce7de300cf75e6b578edeb0abc878
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 17 09:06:35 2022 +0800
+
+    experiment setting
+
+commit 62dfbd974445e5038e0168565620a84f31de755d
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 10 18:29:27 2022 +0800
+
+    seed lacked
+
+commit 775a2acb5ce044af41678e64e893518c8151bf3e
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed Jun 8 19:38:19 2022 +0800
+
+    fcb fairfuzz to afl
+
+commit d565bf3ae16572cde25b3333dcf3a2438f17a81c
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Jun 7 10:49:51 2022 +0800
+
+    ip correction
+
+commit f3153096c6a59a24eee68abeb391d25847bbb508
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue Jun 7 10:48:02 2022 +0800
+
+    script for comparasion experiments between enfuzz and casefc
+
+commit 59c0812bc0c4737d2cced1cfa92222980f01f903
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 3 19:26:30 2022 +0800
+
+    script for change experiment fuzzer
+
+commit a4c0708e24fa040c10a2801518caa5fb33c71fdf
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri Jun 3 17:08:35 2022 +0800
+
+    scripts for test data collect
+
+commit 80981b6af65c194e7aac1fe271dd1764c72e998b
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Jun 2 15:28:21 2022 +0800
+
+    seeds for expfcbnm4
+
+commit 37a028029f36bd144d3a2632cfd333f426f622da
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Jun 2 14:59:10 2022 +0800
+
+    experiments settings
+
+commit 8d7c90995676002a34eab98fe9ce0f8b67f1aa92
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu Jun 2 10:25:09 2022 +0800
+
+    test setting scripts
+
+commit c53baa2682ba8a12bc1f61ec5abdecdcecfbb859
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed Jun 1 09:24:22 2022 +0800
+
+    scheduler casefc unable to get fuzzer type sometimes,fuzzer startup especially
+
+commit 9ec31c16b382e7e0f9f7284a7adfc0b528dc668d
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 31 16:05:40 2022 +0800
+
+    experiment setting uses relative path
+
+commit b0428d290116a2fb24ebb7109fdfd198e1fd9757
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 31 11:19:48 2022 +0800
+
+    casefc for non-coverage guilded fuzzers
+
+commit cf8a520154d88307c2153d702a2b90d8fb759a82
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun May 29 10:01:58 2022 +0800
+
+    enfuzz global coverage sent by statsd
+
+commit 13981d8467f081dcdcf61c683cbd7478a3ee80dc
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun May 29 08:45:57 2022 +0800
+
+    scheduler casefc :enfuzz with coverage privilleged
+
+commit 9e5dac1854cabb3b40f75ba0c3641742333730e5
+Merge: 2a8198b06c 7c08176582
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri May 27 07:23:46 2022 +0800
+
+    Merge branch 'master' of http://81.71.45.225:21125/zhaoxiaoyun/casefs
+
+commit 2a8198b06c3ed2934a132597e3450da4fb2f4236
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Fri May 27 07:23:26 2022 +0800
+
+    casefc scheduler without crash dispatch
+
+commit 7c08176582cabd2c74775ab0fecfc6c25981fc9f
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu May 26 20:38:08 2022 +0800
+
+    pip source when make collabfuzz_run
+
+commit 2d148c40e69d24d386f5d27b21ebdfc8180087ce
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu May 26 20:22:12 2022 +0800
+
+    protobuf too high a version
+
+commit f76461877dcbcb12663c3cffdc124b6fa029ecb1
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu May 26 10:52:23 2022 +0800
+
+    aflplusplus dockerfile error
+
+commit 9e28f6d2a652a70b37ab98c04eeae86b9c647903
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 24 09:06:21 2022 +0800
+
+    framework binutils2.26.1
+
+commit 6e1e40d6f8edcb03c33487ec1f8abc7307fbba7a
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 20:32:29 2022 +0800
+
+    shell path
+
+commit dab6d0a5667d9b5b7929aca309064c9e70d54bef
+Author: kakaxdu <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 19:53:03 2022 +0800
+
+    experiments running settings
+
+commit e5f03086896fe86718f4f7efefbaac34914b68d1
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 16:58:07 2022 +0800
+
+    new experiments
+
+commit 6059d7906295c6eec1751f85b801e94c7de99d17
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 16:56:57 2022 +0800
+
+    new experiments
+
+commit 29cc414620c5d6e24c3be6e9445927dd19ea332b
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 15:56:39 2022 +0800
+
+    binutils paras and seeds
+
+commit 7e5d70c182d04b01c452e773f6bbf73450b0d222
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 08:57:52 2022 +0800
+
+    for google fts git/svn retry
+
+commit c7dfa271ff451ebcbd93ce9d80d58494afb73b90
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 21 08:10:59 2022 +0800
+
+    fairfuzz binutils version
+
+commit ff12d19cc6a6e4919059c665852aa3a068d41fdf
+Author: kakaxdu <zhaoxiaoyunok@163.com>
+Date:   Thu May 19 18:02:07 2022 +0800
+
+    wget binutils
+
+commit 3e939df162d430e4431a163a5d34d8460f35556a
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Thu May 19 17:09:25 2022 +0800
+
+    binutils dockerfile error
+
+commit 6e89ded64c6bf599ef4c199a35949e8adccfb72e
+Author: kakaxdu <zhaoxiaoyunok@163.com>
+Date:   Thu May 19 16:59:39 2022 +0800
+
+    binutils from 2.31 to 2.26,for easier bug finding
+
+commit af51778e535fe0e3c0f31a733cffa80bcb9253cb
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed May 18 15:59:35 2022 +0800
+
+    experiment on objdump and collabfuzzrun makefile
+
+commit b23781003daa58668a8574b48264ce24806de2d1
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed May 18 10:05:16 2022 +0800
+
+    experiment id added for ip generation
+
+commit a1b6b908a40d9fd21013ee1a6d65b3298cf70269
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed May 18 09:09:46 2022 +0800
+
+    seeds for objdump strings
+
+commit 1b12fd6179f61d6e817603c31845f4b4ebaefa1a
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 19:14:12 2022 +0800
+
+    makefile update
+
+commit 3e0465ecff336fa53dbbd942ffdeab9cfe58497e
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 19:03:17 2022 +0800
+
+    binutils-gdb for for libfuzzer
+
+commit 558485d0ab60b25a9ff165a9dd67450df7af6cd8
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 16:04:08 2022 +0800
+
+    qsym compile error and optimize fuzzer compile process
+
+commit 63792ae605475b4bcb77cb80a0143e0e295a9f58
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 15:13:02 2022 +0800
+
+    qsym image build error
+
+commit 445c5b88c68957921d78f2b8fe51ece3dfabd3e4
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 10:19:14 2022 +0800
+
+    angora wget without ssl check
+
+commit 6f6b56b6d745d933bc43616b1e7ca19d0c40e957
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 09:59:56 2022 +0800
+
+    makefile of fuzzers
+
+commit b3739225464427aefdeb4a3dc0d09c972b12b402
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 09:31:17 2022 +0800
+
+    compile cacher , angora system compile error
+
+commit 0cb69480c9aee7d0d264f2fa7922a5930d144bfa
+Merge: 9a9a6d0516 239e5fd3e7
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 07:20:27 2022 +0800
+
+    Merge branch 'master' of http://81.71.45.225:21125/zhaoxiaoyun/casefs
+
+commit 9a9a6d051668ffc86789c688c548e3a9b31fee51
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Tue May 17 07:20:13 2022 +0800
+
+    wget error:unable to establish ssl connection
+
+commit 239e5fd3e78e45d0d78f1dcac056765bca59c87c
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 19:47:00 2022 +0800
+
+    timezone setting problem
+
+commit 9d749eee4b42834aeb360ed32c56ccd0e6487bbb
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 18:19:28 2022 +0800
+
+    some sources too slow,change git address
+
+commit a8e954098b6661f05bbc84f51333ce399ab4cee6
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 18:17:59 2022 +0800
+
+    remove fts submodule
+
+commit 264c00f80b3df45bacfdcb680f76020eca1a4b49
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 15:38:31 2022 +0800
+
+    symcc need automake
+
+commit 90455a49152debdeb01c00b1a64a599625e5a573
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 10:27:53 2022 +0800
+
+    apt mirror aliyun and framework compile with google fts
+
+commit c13545d8a102dc94d5b8cc3467b51b2f7f51e368
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 10:03:10 2022 +0800
+
+    framework google fts compile
+
+commit 5047b9696c4234be83a932e5b50a71d56952d8b1
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 16 09:40:37 2022 +0800
+
+    some sources ,such as freetype2,too slow
+
+commit 8e7f912ea0f3864e91c3c50a92d910f8afa422b6
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun May 15 14:21:51 2022 +0800
+
+    compile error for afl unibench
+
+commit bd52453783c46651947d4592f0b7b6feac5d4931
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun May 15 07:24:23 2022 +0800
+
+    framework compile error because of new protobuf version
+
+commit 3f3d68e550d59266eef38eb06158100bddf4aa80
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat May 14 20:08:52 2022 +0800
+
+    make sure fuzzers works on all the benchmarks
+
+commit 18919dc4bd9408361475df99e51f3976aca0235d
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sun May 8 10:29:36 2022 +0800
+
+    add testcase scheduling policy casefc
+
+commit 76ebf8e631e063f69b0ce73f2e8600520805d6aa
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Wed May 4 15:19:19 2022 +0800
+
+    modify for running info db storage from dumping when ctrl+c to storing immeadiately
+
+commit f30bfed3a863874f6bca67709036c894591b10b2
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Mon May 2 10:06:50 2022 +0800
+
+    framework return to llvm9 ok;analysis ok;all fuzzers except qsym work on objdump;runner modified for practical experiment with automatic ip assignment
+
+commit 1fcf0718427116b18185a942a2dd46143d062b55
+Author: zhaoxiaoyun <zhaoxiaoyunok@163.com>
+Date:   Sat Apr 23 18:18:56 2022 +0800
+
+    init commit 20220423 code simplication

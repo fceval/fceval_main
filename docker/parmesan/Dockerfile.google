@@ -1,0 +1,30 @@
+FROM fuzzer-system:parmesan
+
+ENV CC=gclang CXX=gclang++  
+
+# build binutils 
+WORKDIR  /work
+RUN rm -rf fuzzer-test-suite && git clone https://github.com/google/fuzzer-test-suite.git && cd fuzzer-test-suite && git checkout b2e885706d6
+#COPY fuzzer-test-suite fuzzer-test-suite
+#COPY google-cxxflags.patch fuzzer-test-suite/
+#COPY build.sh fuzzer-test-suite/build.sh
+#RUN  cd fuzzer-test-suite && git apply google-cxxflags.patch
+
+RUN mkdir -p /targets/parmesan-google/afl && mkdir -p /targets/parmesan-google/origin && mkdir -p /targets/parmesan-google/bcfirst && mkdir -p /targets/parmesan-google/full && apt-get update && apt-get install -y rsync libarchive-dev  libbz2-dev libxml2-dev libssl-dev liblzma-dev nasm  libgcrypt-dev libbfd-dev libunwind-dev binutils-dev git libtool libtool-bin automake bison libglib2.0-dev python python3-pip cmake curl libc-ares-dev libfreetype6-dev libarchive-dev ragel bzip2 libgss-dev subversion libgcrypt-dev autoconf-archive virtualenv libdbus-glib-1-dev libgirepository1.0-dev libturbojpeg libssh-dev libssl-dev nasm libbz2-dev libxml2-dev software-properties-common libacl1-dev liblzma-dev
+
+RUN mkdir build-test-suite-bcfirst
+COPY build_fuzzer_test_suite_bcfirst.py build-test-suite-bcfirst/build_fuzzer_test_suite_bcfirst.py
+RUN cd build-test-suite-bcfirst  && FUZZING_ENGINE=coverage python build_fuzzer_test_suite_bcfirst.py
+
+
+RUN find build-test-suite-bcfirst -name "*-coverage-asan" -executable | xargs cp -t  /targets/parmesan-google/origin && rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-bcfirst/RUNDIR-* /targets/parmesan-google/origin
+ 
+ 
+
+
+WORKDIR  /work/parmesan
+RUN ./misc/build_google.sh
+
+COPY  --from=fuzzer-afl:google /targets/afl-google /targets/parmesan-google/afl
+
+

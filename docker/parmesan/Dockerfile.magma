@@ -1,0 +1,17 @@
+FROM fuzzer-system:parmesan
+RUN apt-get update && apt-get install -y python3-pip  && pip3 install pylddwrap
+ENV CC=gclang CXX=gclang++  
+
+# build binutils 
+WORKDIR  /work
+RUN mkdir -p /targets/parmesan-magma/bcfirst && mkdir -p /targets/parmesan-magma/full
+COPY magma /work/magma
+COPY magma/run.sh /targets/run.sh
+RUN cd /work/magma && ./build_magma_bc.sh && python3 build_magma_ab.py 
+
+WORKDIR  /work/parmesan
+RUN ./misc/build_magma.sh
+ 
+
+
+

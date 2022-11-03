@@ -1,0 +1,264 @@
+use super::util::{QueueSchedulerConfig, QueueSchedulerHelper, SchedulerFacadeRef};
+use super::{ScheduleMessage, Scheduler};
+use crate::analysis::coverage_utils::Edge;
+use crate::analysis::AnalysisType;
+use crate::analysis::GlobalCoverageState;
+use crate::analysis::FuzzerCoverageState;//zhaoxy add custom scheduler
+use crate::storage::TestCaseHandle;
+use priority_queue::PriorityQueue;
+use std::collections::{HashMap, HashSet};
+use std::sync::{Arc, Mutex};
+use crate::fuzzers::FuzzerId;//zhaoxy add custom scheduler
+use crate::fuzzers::FuzzerType;//zhaoxy add custom scheduler
+use cadence::prelude::*;
+use std::net::UdpSocket;
+use std::time::{Duration};
+use cadence::{StatsdClient, UdpMetricSink};
+
+//zhaoxy add custom scheduler adding this file
+
+pub const SCHEDULER_NAME: &str = "htfuzzzxy";
+
+pub struct HtfuzzzxyScheduler {
+    facade_ref: Arc<Mutex<SchedulerFacadeRef>>,
+    prev_coverage: HashSet<Edge>,
+    prev_coverage_fuzzers: HashMap<FuzzerId, HashSet<Edge>>,//zhaoxy add custom scheduler
+
+    //zhaoxy add for basic block coverage start
+    prev_coverage_bb: HashSet<u64>,
+    prev_coverage_fuzzers_bb: HashMap<FuzzerId, HashSet<u64>>,
+    //zhaoxy add for basic block coverage end
+
+    scheduling_queue: Arc<Mutex<PriorityQueue<TestCaseHandle, usize>>>,
+    _helper: QueueSchedulerHelper,
+    client:StatsdClient,  //zhaoxy add for statsd coverage
+}
+
+ 
+
+impl HtfuzzzxyScheduler {
+    pub fn new(facade_ref: SchedulerFacadeRef) -> Self {
+        log::debug!("zxydebughtfuzzzxynewnewnew ");
+        let facade_ref = Arc::new(Mutex::new(facade_ref));
+        let scheduling_queue = Arc::new(Mutex::new(PriorityQueue::new()));
+
+        let helper_config = QueueSchedulerConfig {
+            interval: Duration::from_secs(120),
+            percentage: 1.,
+            allow_env_override: false,
+        };
+
+        let helper = QueueSchedulerHelper::new(&facade_ref, &scheduling_queue, Some(helper_config));
+        //zhaoxy add for statsd coverage start
+        let prefix = "fuzzing"; 
+        let host = ("172.24.0.3", 9125);//8125
+        let socket = UdpSocket::bind("0.0.0.0:0").unwrap();
+        let sink = UdpMetricSink::from(host,socket).unwrap();
+        let _client = StatsdClient::from_sink(prefix, sink);
+        let prev_coverage_fuzzers:HashMap<FuzzerId, HashSet<Edge>> = HashMap::new();
+        //zhaoxy add for statsd coverage end
+        let prev_coverage_fuzzers_bb:HashMap<FuzzerId, HashSet<u64>> = HashMap::new();//zhaoxy add for basic block coverage
+        Self {
+            facade_ref,
+            prev_coverage: HashSet::new(),
+            prev_coverage_fuzzers,//zhaoxy add custom scheduler
+            //zhaoxy add for basic block coverage start
+            prev_coverage_bb: HashSet::new(),
+            prev_coverage_fuzzers_bb,
+            //zhaoxy add for basic block coverage end
+            scheduling_queue,
+            _helper: helper,
+            client:_client,  //zhaoxy add for statsd coverage end
+        }
+    }
+}
+
+impl Scheduler for HtfuzzzxyScheduler {
+    fn schedule(&mut self, schedule_message: ScheduleMessage) {
+        log::debug!("zxydebughtfuzzzxyscheduleaaaaaaaaaaaaaa");
+        let test_handle = match schedule_message {
+            ScheduleMessage::Timeout => {
+                log::debug!("zxydebughtfuzzzxyschedulebbbbbbbbbbb");
+                log::debug!("Do nothing on timeout");
+                return;
+            }
+            ScheduleMessage::DuplicateTestCase(_) => {
+                log::debug!("zxydebughtfuzzzxyscheduleccccccccccc");
+                log::debug!("Duplicate test case reported, ignoring");
+                return;
+            }
+            ScheduleMessage::NewTestCase(test_handle) => {
+                log::debug!("zxydebughtfuzzzxyscheduledddddddddddd");
+                log::debug!("New seed reported, running");
+                test_handle
+            }
+        };
+        log::debug!("zxydebughtfuzzzxyscheduleeeeeeeeeeeeeeeee");
+        let facade_ref = self.facade_ref.lock().unwrap();
+        let mut scheduling_queue = self.scheduling_queue.lock().unwrap();
+
+        let mut facade = facade_ref.get_facade();
+
+        let edge_tracer_global_state = &facade
+            .get_analysis_state(AnalysisType::GlobalCoverage)
+            .downcast_ref::<GlobalCoverageState>()
+            .unwrap();
+
+        let new_coverage = edge_tracer_global_state.get_global_coverage();
+        let coverage_increment = new_coverage.difference(&self.prev_coverage);
+
+        let new_edge_tracer_fuzzers_state = &facade
+        .get_analysis_state(AnalysisType::FuzzerCoverage)
+        .downcast_ref::<FuzzerCoverageState>()
+        .unwrap();
+        let mut new_coverage_bb = edge_tracer_global_state.get_global_coverage_bb();
+        let coverage_increment_bb = new_coverage_bb.difference(&self.prev_coverage_bb);
+
+        let flag_coverage_increase = (coverage_increment).count() != 0;
+        let flag_coverage_increase_bb = (coverage_increment_bb).count() != 0;
+        log::debug!("zxydebughtfuzzzxy1111----{}{}",flag_coverage_increase,flag_coverage_increase_bb);
+        if !flag_coverage_increase && !flag_coverage_increase_bb {
+            log::debug!("zxydebughtfuzzzxy22222");
+            log::debug!("New test case did not produce new coverage edge-bb, ignoring");
+            return;
+        }
+        log::debug!("zxydebughtfuzzzxy333333333333");
+        if flag_coverage_increase {
+            log::debug!("zxydebughtfuzzzxy444444444444");
+            //zhaoxy add for statsd coverage start
+            let len = new_coverage.len();//usize
+            log::debug!("zxy print coverage for htfuzzzxy.rs:{}",len);//zhaoxy add for branch coverage
+            
+            //log::debug!("zxy print coverage start rsrsrsrsrsrsportport {}",DEFAULT_PORT);
+            //self.client.count("coverage.branches",len as i64).expect("zxy send number of branches error"); 
+            //log::debug!("zxy print coverage end");
+            //zhaoxy add for statsd coverage end
+            self.client.gauge_with_tags("fuzzing_center.coverage", len as u64)
+            .with_tag("fuzzer", "global")
+            .with_tag_value("centermetric")
+            .try_send().unwrap();
+            self.prev_coverage = new_coverage.clone();
+
+            // //zhaoxy add custom scheduler start
+            log::debug!("zxydebughtfuzzzxy5555555555555");
+
+            for (fuzzer_id, fuzzer_edges_cover) in new_edge_tracer_fuzzers_state.get_fuzzers_coverage() {
+                log::debug!("zxydebughtfuzzzxy66666666fuzzerid:{}",fuzzer_id.to_string().as_str());
+                if(self.prev_coverage_fuzzers.contains_key(fuzzer_id) ){
+                    log::debug!("zxydebughtfuzzzxy66666666666666");
+                //log::debug!("New test ca{}------{:?}, ignoring",fuzzer_id,self.prev_coverage_fuzzers[fuzzer_id]);
+                    let fuzzer_edges_coverage_increment = fuzzer_edges_cover.difference(&self.prev_coverage_fuzzers[fuzzer_id]);
+                    if fuzzer_edges_coverage_increment.count() == 0 {
+                        log::debug!("zxydebughtfuzzzxy777777777777777777");
+                        log::debug!("New test case did not produce new coverage for fuzzer{}, ignoring",fuzzer_id.as_u32());
+                        continue;
+                    }
+                }
+                log::debug!("zxydebughtfuzzzxy88888888888888888");
+                //for cover_tmp in fuzzer_edges_cover {
+                //   self.prev_coverage_fuzzers[fuzzer_id].em
+                //} 
+                //self.prev_coverage_fuzzers.get_mut(fuzzer_id) =  fuzzer_edges_cover.clone();
+                //log::debug!("zxy print coverage for htfuzzzxy fuzzer{}:{}",fuzzer_id.as_u32(),fuzzer_edges_cover.len());//zhaoxy add for branch coverage
+                log::debug!("zxy print coverage for htfuzzzxy fuzzer{:?}:{}",fuzzer_id,fuzzer_edges_cover.len());//zhaoxy add for branch coverage
+                let len = fuzzer_edges_cover.len();//usize
+                //log::debug!("zxy print coverage start rsrsrsrsrsrsportport {}",DEFAULT_PORT);
+                //let tag = format!("fuzzing_center.coverage.{}", fuzzer_id);
+                //self.client.gauge(&tag, len as u64).expect("zxy send number of branches for fuzzer error");
+                //let mut tags= String::from("fuzzing_center.coverageaaa");
+                //self.client.gauge(&tag, len as u64).with_tag("foo", "bar").with_tag_value("beta").try_send();
+                self.client.gauge_with_tags("fuzzing_center.coverage", len as u64)
+                .with_tag("fuzzer", fuzzer_id.to_string().as_str())
+                .with_tag_value("centermetric")
+                .try_send().unwrap();
+                //self.client.count("coverage.branches",fuzzer_edges_cover.len() as i64).expect("zxy send number of branches for fuzzer error"); 
+            }
+            self.prev_coverage_fuzzers =  new_edge_tracer_fuzzers_state.get_fuzzers_coverage().clone();
+            log::debug!("zxydebughtfuzzzxy9999999999999999999");
+            //if edge coverage increases, schedule testcase to all edge-guided fuzzers
+            for fuzzer_type in facade.get_available_fuzzers_edge() {//broadcast testcases to all available fuzzers
+                log::debug!("Dispatching to {:?}", fuzzer_type);
+                log::debug!("zxydebughtfuzzzxy10101010fuzzertype{:?}", fuzzer_type);
+                if let Err(e) =
+                facade_ref.get_facade().dispatch_test_cases_to_all(vec![test_handle.clone()], fuzzer_type)
+                {
+                    log::debug!("zxydebughtfuzzzxyaaaaaaaaaaaaaaaaaa");
+                    log::error!("Error while dispatching seed: {}", e);
+                }
+            }
+        
+        }
+
+        //zhaoxy add for basic block coverage start
+
+        log::debug!("zxydebughtfuzzzxybbbbbbbbbbbbbbbbb");
+        // if flag_coverage_increase_bb {
+        //     //zhaoxy add for statsd coverage start
+        //     log::debug!("zxydebughtfuzzzxycccccccccc");
+        //     let len = new_coverage_bb.len();//usize
+        //     log::debug!("zxy print coveragebbb for htfuzzzxy.rs:{}",len);//zhaoxy add for branch coverage
+        //     //log::debug!("zxy print coverage start rsrsrsrsrsrsportport {}",DEFAULT_PORT);
+        //     //self.client.count("coverage.branches",len as i64).expect("zxy send number of branches error"); 
+        //     //log::debug!("zxy print coverage end");
+        //     //zhaoxy add for statsd coverage end
+        //     self.client.gauge_with_tags("fuzzing_center.coverage.bb", len as u64)
+        //     .with_tag("fuzzer", "global")
+        //     .with_tag_value("centermetric")
+        //     .try_send().unwrap();
+        //     self.prev_coverage_bb = new_coverage_bb.clone();
+
+        //     log::debug!("zxydebughtfuzzzxyddddddddddddddddd");
+        //     for (fuzzer_id, fuzzer_edges_cover_bb) in new_edge_tracer_fuzzers_state.get_fuzzers_coverage_bb() {
+        //         log::debug!("zxydebughtfuzzzxy9eeeeeeeeeeeeeeefuzzerid:{:?}",fuzzer_id);
+        //         if(self.prev_coverage_fuzzers_bb.contains_key(fuzzer_id) ){
+        //             log::debug!("zxydebughtfuzzzxyfffffffffffffffffffffff");
+        //         //log::debug!("New test ca{}------{:?}, ignoring",fuzzer_id,self.prev_coverage_fuzzers[fuzzer_id]);
+        //             let fuzzer_bbs_coverage_increment = fuzzer_edges_cover_bb.difference(&self.prev_coverage_fuzzers_bb[fuzzer_id]);
+        //             if fuzzer_bbs_coverage_increment.count() == 0 {
+        //                 log::debug!("zxydebughtfuzzzxygggggggggggggggggnot produce new coverage bbfor fuzzer{}, ignoring",fuzzer_id.as_u32());
+        //                 log::debug!("New test case did not produce new coverage bbfor fuzzer{}, ignoring",fuzzer_id.as_u32());
+        //                 continue;
+        //             }
+        //         }
+        //         log::debug!("zxydebughtfuzzzxyhhhhhhhhhhhhhhhhhhhhhh");
+        //         //for cover_tmp in fuzzer_edges_cover {
+        //         //   self.prev_coverage_fuzzers[fuzzer_id].em
+        //         //} 
+        //         //self.prev_coverage_fuzzers.get_mut(fuzzer_id) =  fuzzer_edges_cover.clone();
+        //         //log::debug!("zxy print coverage for htfuzzzxy fuzzer{}:{}",fuzzer_id.as_u32(),fuzzer_edges_cover.len());//zhaoxy add for branch coverage
+        //         log::debug!("zxy print coverage bbfor htfuzzzxy fuzzer{:?}:{}",fuzzer_id,fuzzer_edges_cover_bb.len());//zhaoxy add for branch coverage
+        //         let len = fuzzer_edges_cover_bb.len();//usize
+        //         //log::debug!("zxy print coverage start rsrsrsrsrsrsportport {}",DEFAULT_PORT);
+        //         //let tag = format!("fuzzing_center.coverage.{}", fuzzer_id);
+        //         //self.client.gauge(&tag, len as u64).expect("zxy send number of branches for fuzzer error");
+        //         //let mut tags= String::from("fuzzing_center.coverageaaa");
+        //         //self.client.gauge(&tag, len as u64).with_tag("foo", "bar").with_tag_value("beta").try_send();
+        //         self.client.gauge_with_tags("fuzzing_center.coverage.bb", len as u64)
+        //         .with_tag("fuzzer", fuzzer_id.to_string().as_str())
+        //         .with_tag_value("centermetric")
+        //         .try_send().unwrap();
+        //         log::debug!("zxydebughtfuzzzxyiiiiiiiiiiiiiiiiiiiiii");
+        //         //self.client.count("coverage.branches",fuzzer_edges_cover.len() as i64).expect("zxy send number of branches for fuzzer error"); 
+        //     }
+        //     self.prev_coverage_fuzzers_bb =  new_edge_tracer_fuzzers_state.get_fuzzers_coverage_bb().clone();
+        //     log::debug!("zxydebughtfuzzzxyjjjjjjjjjjjjjjjjjjjjjjj");
+        //     //if bb coverage increases, schedule testcase to all bb-guided fuzzers
+        //     for fuzzer_type in facade.get_available_fuzzers_bb() {//broadcast testcases to all available fuzzers
+        //         log::debug!("Dispatching tobbfuzzer:bb {:?}", fuzzer_type);
+        //         log::debug!("zxydebughtfuzzzxykkkkkkkkkkkk:bb {:?}", fuzzer_type);
+        //         if let Err(e) = 
+        //             facade_ref.get_facade().dispatch_test_cases_to_all(vec![test_handle.clone()], fuzzer_type)
+        //         {
+        //             log::debug!("zxydebughtfuzzzxyllllllllllllllllllll");
+        //             log::error!("Error while dispatching seed: {}", e);
+        //         }
+        //     }
+
+        // }
+        //zhaoxy add for basic block coverage end
+        log::debug!("zxydebughtfuzzzxymmmmmmmmmmmmmmmmmmmmmmmm");
+        log::debug!("Queuing test case");
+        scheduling_queue.push(test_handle, 0);
+
+    }
+}

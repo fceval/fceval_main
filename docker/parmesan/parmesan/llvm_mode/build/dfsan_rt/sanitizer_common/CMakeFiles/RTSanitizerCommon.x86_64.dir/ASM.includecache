@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/work/parmesan/llvm_mode/dfsan_rt/sanitizer_common/assembly.h
+
+/work/parmesan/llvm_mode/dfsan_rt/sanitizer_common/sanitizer_linux_mips64.S
+
+/work/parmesan/llvm_mode/dfsan_rt/sanitizer_common/sanitizer_linux_x86_64.S
+./assembly.h
+/work/parmesan/llvm_mode/dfsan_rt/sanitizer_common/assembly.h
+

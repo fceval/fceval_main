@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-8/zhaoxy/casefs/runners/expobjdump/fcb/04-08-2022-expfcbobjdump-20-objdump-0
+INFO:runner.__main__:zxy father_path /home/rack12-8/zhaoxy/casefs/runners/expobjdump/fcb
+INFO:runner.__main__:zxy base_name fcb
+ERROR:runner.__main__:please make sure the parent directory is runners!

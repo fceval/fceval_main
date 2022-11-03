@@ -1,0 +1,16 @@
+FROM fuzzer-system:afl
+
+#ENV CC=clang CXX=clang++
+
+WORKDIR  /work
+COPY google /work/
+COPY binsfuzzbench /work/binsfuzzbench
+
+#RUN apt-get update && apt-get install -y libarchive-dev libxml2-dev libgcrypt-dev libssl-dev libbz2-dev liblzma-dev libvorbis-dev libogg-dev  nasm #autoconf-archive lcov subversion zlib1g-dev libdbus-1-dev pkg-config
+
+#RUN wget https://raw.githubusercontent.com/llvm/llvm-project/5feb80e748924606531ba28c97fe65145c65372e/compiler-rt/lib/fuzzer/afl/afl_driver.cpp -O /#afl/afl_driver.cpp && \
+#    clang -Wno-pointer-sign -c /afl/llvm_mode/afl-llvm-rt.o.c -I/afl && \
+#    clang++ -stdlib=libc++ -std=c++11 -O2 -c /afl/afl_driver.cpp && \
+#    ar r /libAFL.a *.o
+
+ 

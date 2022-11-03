@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG   CMakeFiles/AngoraClang.dir/angora_clang.c.o  -o angora-clang 

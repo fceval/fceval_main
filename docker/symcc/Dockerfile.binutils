@@ -1,0 +1,22 @@
+FROM fuzzer-system:symcc
+
+
+
+# build binutils 
+WORKDIR  /work
+RUN mkdir -p /targets/symcc-binutils/afl && mkdir -p /targets/symcc-binutils/symcc
+
+COPY  --from=fuzzer-afl /targets/binutils /targets/symcc-binutils/afl
+
+ENV CC=symcc CXX=sym++
+
+RUN tar xfv binutils-2.26.1.tar.gz && cp -r binutils-2.26.1 afl-binutils-2.26.1 && cd binutils-2.26.1/ && ./configure --help && ./configure --prefix=/targets/symcc-binutils/symcc/ && make -j`nproc` && make install && make clean
+
+
+#ENV CC=afl-clang-fast CXX=afl-clang-fast++ AFL_USE_ASAN=1
+#RUN cd afl-binutils-2.26.1/ && ./configure --prefix=/targets/symcc-binutils/afl/ && make -j`nproc` && make install && make clean && unset CC CXX AFL_USE_ASAN
+
+
+
+
+

@@ -1,0 +1,20 @@
+FROM fuzzer-system:libfuzzer
+
+WORKDIR /work/fuzzer-test-suite
+ENV LIBFUZZER_SRC=/work/src/libfuzzer/ FUZZING_ENGINE=fsanitize_fuzzer SANITIZER=address SRC=/work/fuzzer-test-suite/unibench OUT=/targets/libfuzzer-unibench
+RUN mkdir -p /targets/libfuzzer-unibench
+
+SHELL ["/bin/bash", "-c"]
+
+# install proper tools
+# Need curl and gnupg to grab llvm. Also grab build-essential
+# for binutil's build dependencies (make, etc)
+RUN apt-get update && apt-get install -y curl gnupg build-essential apt-transport-https zip flex bison cmake make ccache python3 libexpat1-dev zlib1g-dev libssh-dev libcurl4-openssl-dev libxml2-utils  libssl-dev build-essential && apt remove cmake -y && cd unibench && tar -zxvf cmake-3.16.0.tar.gz && cd cmake-3.16.0 && ./bootstrap && make && make install 
+
+COPY unibench /work/fuzzer-test-suite/unibench
+ENV PATH=$PATH:/usr/local/bin/cmake
+
+# exiv2 
+RUN cd unibench/exiv2 &&  ./build.sh
+ 
+

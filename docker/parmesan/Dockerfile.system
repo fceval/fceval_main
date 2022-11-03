@@ -1,0 +1,51 @@
+FROM ubuntu:20.04
+RUN export DEBIAN_FRONTEND=noninteractive   && apt-get update  && apt-get install -y tzdata && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && dpkg-reconfigure --frontend noninteractive tzdata
+# RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+# RUN DEBIAN_FRONTEND=noninteractive 
+# support apt mirror selection for faster build
+# you can build with --build-arg APT=mirrors.aliyun.com
+#ARG APT=mirrors.aliyun.com
+#ARG APT
+
+SHELL ["/bin/bash", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONIOENCODING=utf8 \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8
+    
+
+
+# install proper tools
+#RUN ([ "$APT" == "" ] || (sed -i "s/security.ubuntu.com/$APT/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/$APT/g" /etc/apt/sources.list) ) &&\
+RUN (sed -i "s/security.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/mirrors.aliyun.com/g" /etc/apt/sources.list) &&\ 
+    apt-get update && \
+    apt-get install -y git build-essential wget zlib1g-dev golang-go python3-pip python3-dev python-is-python3 build-essential cmake nano texinfo build-essential python2.7-dev sudo  libevent-dev ncurses-dev build-essential bison pkg-config automake autoconf
+
+WORKDIR /work
+
+COPY --from=fuzzer-system /work  /work
+ 
+
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PIN_ROOT=/pin-3.7-97619-g0d0c92f4f-gcc-linux \
+    GOPATH=/go \
+    PATH=/clang+llvm/bin:/usr/local/cargo/bin:/work/parmesan/bin/:/go/bin:$PATH \
+    LD_LIBRARY_PATH=/clang+llvm/lib:$LD_LIBRARY_PATH
+
+#RUN git clone https://github.com/vusec/parmesan.git
+COPY parmesan parmesan/
+WORKDIR /work/parmesan
+RUN ./build/install_rust.sh && PREFIX=/ ./build/install_llvm.sh && ./build/install_tools.sh && ./build/build.sh
+##RUN ./build/install_pin_mode.sh
+# ParmeSan does not support PIN atm
+#RUN ./misc/build_objdump.sh && cd /work/parmesan/workdir/build && /work/parmesan/bin/fuzzer -c ./targets.pruned.json -i in -o out -t ./objdump.track -s ./objdump.san.fast -- ./objdump.fast -s -d @@
+#VOLUME ["/work"]
+#WORKDIR /work
+#ENTRYPOINT [ "/opt/env.init" ]
+
+#WORKDIR /work
+RUN cd /work && tar xfv afl-2.56b.tar.gz && mv AFL-2.56b afl && cd afl &&  make -j`nproc`   && cd llvm_mode &&   make -j`nproc`   CC=clang CXX=clang++  && cd ../ && ls && ./afl-clang --version && make install
+
+RUN git clone https://github.com/tmux/tmux.git && cd tmux && sh autogen.sh && ./configure && make && make install

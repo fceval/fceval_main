@@ -1,0 +1,170 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  afl-0-exid24:
+    depends_on:
+    - framework-exid24
+    - driver-afl-0-exid24
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: afl-0-exid24
+      OUTPUT_DIR: /data/afl-0-exid24
+    image: fuzzer-afl-mp42aac
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.14
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/mp42aac:/in
+  aflfast-0-exid24:
+    depends_on:
+    - framework-exid24
+    - driver-aflfast-0-exid24
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflfast-0-exid24
+      OUTPUT_DIR: /data/aflfast-0-exid24
+    image: fuzzer-aflfast-mp42aac
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.16
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/mp42aac:/in
+  aflplusplus-0-exid24:
+    depends_on:
+    - framework-exid24
+    - driver-aflplusplus-0-exid24
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflplusplus-0-exid24
+      OUTPUT_DIR: /data/aflplusplus-0-exid24
+    image: fuzzer-aflplusplus-mp42aac
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/mp42aac:/in
+  driver-afl-0-exid24:
+    depends_on:
+    - framework-exid24
+    environment:
+      ARG: /targets/unibench/mp42aac @@ /dev/null
+      FUZZER_NAME: afl-0-exid24
+      FUZZER_TYPE: afl
+      OUTPUT_DIR: /data/afl-0-exid24/
+      URI_CONTROL: tcp://framework-exid24:3001
+      URI_LISTENER: tcp://framework-exid24:3000
+      URI_SCHEDULER: tcp://framework-exid24:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid24
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.15
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-aflfast-0-exid24:
+    depends_on:
+    - framework-exid24
+    environment:
+      ARG: /targets/unibench/mp42aac @@ /dev/null
+      FUZZER_NAME: aflfast-0-exid24
+      FUZZER_TYPE: aflfast
+      OUTPUT_DIR: /data/aflfast-0-exid24/
+      URI_CONTROL: tcp://framework-exid24:3001
+      URI_LISTENER: tcp://framework-exid24:3000
+      URI_SCHEDULER: tcp://framework-exid24:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid24
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.17
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-aflplusplus-0-exid24:
+    depends_on:
+    - framework-exid24
+    environment:
+      ARG: /targets/unibench/mp42aac @@ /dev/null
+      FUZZER_NAME: aflplusplus-0-exid24
+      FUZZER_TYPE: aflplusplus
+      OUTPUT_DIR: /data/aflplusplus-0-exid24/
+      URI_CONTROL: tcp://framework-exid24:3001
+      URI_LISTENER: tcp://framework-exid24:3000
+      URI_SCHEDULER: tcp://framework-exid24:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid24
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-fairfuzz-0-exid24:
+    depends_on:
+    - framework-exid24
+    environment:
+      ARG: /targets/unibench/mp42aac @@ /dev/null
+      FUZZER_NAME: fairfuzz-0-exid24
+      FUZZER_TYPE: fairfuzz
+      OUTPUT_DIR: /data/fairfuzz-0-exid24/
+      URI_CONTROL: tcp://framework-exid24:3001
+      URI_LISTENER: tcp://framework-exid24:3000
+      URI_SCHEDULER: tcp://framework-exid24:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid24
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.19
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  fairfuzz-0-exid24:
+    depends_on:
+    - framework-exid24
+    - driver-fairfuzz-0-exid24
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: fairfuzz-0-exid24
+      OUTPUT_DIR: /data/fairfuzz-0-exid24
+    image: fuzzer-fairfuzz-mp42aac
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.18
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/mp42aac:/in
+  framework-exid24:
+    environment:
+      ANALYSIS_BIN_DIR: /work/analysis_binaries/mp42aac.analysis_binaries/
+      ARG: '@@ /dev/null'
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: casefc
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.24.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/mp42aac:/in
+version: '2'
+volumes:
+  data-vol: {}

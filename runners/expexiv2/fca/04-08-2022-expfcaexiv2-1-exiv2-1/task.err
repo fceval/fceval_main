@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-8/zhaoxy/casefs/runners/expexiv2/fca/04-08-2022-expfcaexiv2-1-exiv2-1
+INFO:runner.__main__:zxy father_path /home/rack12-8/zhaoxy/casefs/runners/expexiv2/fca
+INFO:runner.__main__:zxy base_name fca
+ERROR:runner.__main__:please make sure the parent directory is runners!

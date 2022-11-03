@@ -1,0 +1,14 @@
+FROM gcr.io/fuzzbench/runners/afl/file_magic_fuzzer
+COPY --from=fuzzer-afl:binutils  /targets/afl-binutils /targets/binutils 
+#COPY --from=fuzzer-afl:lava  /targets/afl-lava /targets/lava
+#COPY --from=fuzzer-afl:google  /targets/afl-google /targets/google
+#COPY --from=fuzzer-afl:unibench  /targets/afl-unibench /targets/unibench
+#COPY --from=fuzzer-afl:putone  /targets/afl-putone /targets/putone
+#COPY --from=fuzzer-afl:fuzzbench  /work/binsfuzzbench /targets/fuzzbench 
+COPY binsfuzzbench /targets/fuzzbench
+RUN  cp -rf /out /afl
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+

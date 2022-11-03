@@ -1,0 +1,13 @@
+strict digraph  {
+"cfgedges.bc.sum.%2" [basic_block="%2", function=sum, module="cfgedges.bc"];
+"cfgedges.bc.sub.%2" [basic_block="%2", function=sub, module="cfgedges.bc"];
+"cfgedges.bc.tiao.%10" [basic_block="%10", function=tiao, module="cfgedges.bc"];
+"cfgedges.bc.tiao.%2" [basic_block="%2", function=tiao, module="cfgedges.bc"];
+"cfgedges.bc.tiao.%4" [basic_block="%4", function=tiao, module="cfgedges.bc"];
+"cfgedges.bc.tiao.%7" [basic_block="%7", function=tiao, module="cfgedges.bc"];
+"cfgedges.bc.main.%0" [basic_block="%0", function=main, module="cfgedges.bc"];
+"cfgedges.bc.tiao.%2" -> "cfgedges.bc.tiao.%4"  [type=br];
+"cfgedges.bc.tiao.%2" -> "cfgedges.bc.tiao.%7"  [type=br];
+"cfgedges.bc.tiao.%4" -> "cfgedges.bc.tiao.%10"  [type=br];
+"cfgedges.bc.tiao.%7" -> "cfgedges.bc.tiao.%10"  [type=br];
+}

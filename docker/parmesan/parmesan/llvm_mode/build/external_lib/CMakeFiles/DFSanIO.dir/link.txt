@@ -1,0 +1,2 @@
+/usr/bin/ar qc libDFSanIO.a  CMakeFiles/DFSanIO.dir/io_func.c.o CMakeFiles/DFSanIO.dir/stdalloc.c.o
+/usr/bin/ranlib libDFSanIO.a

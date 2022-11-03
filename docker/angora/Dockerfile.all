@@ -1,0 +1,25 @@
+FROM fuzzer-system:angora
+RUN rm -rf /work
+WORKDIR /work
+COPY --from=fuzzer-system:afl /work/afl /work/afl
+ENV DEBIAN_FRONTEND=noninteractive PATH=/work/afl:/angora/bin:/angora:$PATH
+
+COPY --from=fuzzer-angora:binutils  /targets/angora-binutils /targets/binutils
+COPY --from=fuzzer-angora:binutils  /targets/angora-binutils/afl /targets/binutils/
+
+
+COPY --from=fuzzer-angora:unibench  /targets/angora-unibench /targets/unibench
+COPY --from=fuzzer-angora:unibench  /targets/angora-unibench/afl /targets/unibench/
+
+
+COPY --from=fuzzer-angora:lava  /targets/angora-lava /targets/lava
+COPY --from=fuzzer-angora:lava  /targets/angora-lava/afl /targets/lava/
+
+
+#COPY --from=fuzzer-angora:google  /targets/angora-lava /targets/google
+#COPY --from=fuzzer-angora:google  /targets/angora-lava/afl /targets/google/
+
+COPY --from=fuzzer-angora:putone  /targets/angora-putone /targets/putone
+COPY --from=fuzzer-angora:putone  /targets/angora-putone/afl /targets/putone/
+
+

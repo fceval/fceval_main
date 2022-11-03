@@ -1,0 +1,170 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  aflplusplus-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-aflplusplus-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflplusplus-0-exid4
+      OUTPUT_DIR: /data/aflplusplus-0-exid4
+    image: fuzzer-aflplusplus-openssl
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/openssl:/in
+  driver-aflplusplus-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/magma/openssl/openssl @@
+      FUZZER_NAME: aflplusplus-0-exid4
+      FUZZER_TYPE: aflplusplus
+      OUTPUT_DIR: /data/aflplusplus-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-fairfuzz-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/magma/openssl/openssl @@
+      FUZZER_NAME: fairfuzz-0-exid4
+      FUZZER_TYPE: fairfuzz
+      OUTPUT_DIR: /data/fairfuzz-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.15
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-mopt-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/magma/openssl/openssl @@
+      FUZZER_NAME: mopt-0-exid4
+      FUZZER_TYPE: mopt
+      OUTPUT_DIR: /data/mopt-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.17
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-symcc-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/magma/openssl/openssl @@
+      FUZZER_NAME: symcc-0-exid4
+      FUZZER_TYPE: symcc
+      OUTPUT_DIR: /data/symcc-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.19
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  fairfuzz-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-fairfuzz-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: fairfuzz-0-exid4
+      OUTPUT_DIR: /data/fairfuzz-0-exid4
+    image: fuzzer-fairfuzz-openssl
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.14
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/openssl:/in
+  framework-exid4:
+    environment:
+      ANALYSIS_BIN_DIR: /work/analysis_binaries/openssl.analysis_binaries/
+      ARG: '@@'
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: enfuzz
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/openssl:/in
+  mopt-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-mopt-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: mopt-0-exid4
+      OUTPUT_DIR: /data/mopt-0-exid4
+    image: fuzzer-mopt-openssl
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.16
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/openssl:/in
+  symcc-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-symcc-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: symcc-0-exid4
+      OUTPUT_DIR: /data/symcc-0-exid4
+    image: fuzzer-symcc-openssl
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.14.18
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/openssl:/in
+version: '2'
+volumes:
+  data-vol: {}

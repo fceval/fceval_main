@@ -1,0 +1,26 @@
+#FROM fuzzer-system:symcc
+FROM magma/symcc_afl/libpng
+RUN export DEBIAN_FRONTEND=noninteractive   && apt-get update  && apt-get install -y tzdata && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && dpkg-reconfigure --frontend noninteractive tzdata
+RUN apt-get update && apt-get install -y tmux  libasound2-dev libflac-dev libogg-dev libtool libvorbis-dev libopus-dev libmp3lame-dev libmpg123-dev nasm zlib1g-dev liblzma-dev libjpeg-turbo8-dev libreadline-dev 
+WORKDIR /work
+
+ENV DEBIAN_FRONTEND=noninteractive PATH=/magma/fuzzers/symcc_afl/symcc/util/symcc_fuzzing_helper/target/release:$PATH
+
+#COPY --from=fuzzer-symcc:binutils /targets/symcc-binutils/afl /targets/binutils
+#COPY --from=fuzzer-symcc:binutils /targets/symcc-binutils/symcc /targets/binutils/symcc
+#COPY --from=fuzzer-symcc:lava /targets/symcc-lava/afl /targets/lava
+#COPY --from=fuzzer-symcc:lava /targets/symcc-lava/symcc /targets/lava/symcc
+#RUN apt-get update && apt-get install -y libarchive-dev libglib2.0 libgss3
+#COPY --from=fuzzer-symcc:google /targets/symcc-google /targets/google
+
+#COPY --from=fuzzer-symcc:unibench /targets/symcc-unibench/afl /targets/unibench
+#COPY --from=fuzzer-symcc:unibench /targets/symcc-unibench/symcc /targets/unibench/symcc
+
+#COPY --from=fuzzer-symcc:putone /targets/symcc-putone/afl /targets/putone
+#COPY --from=fuzzer-symcc:putone /targets/symcc-putone/symcc /targets/putone/symcc
+COPY magma /targets/magma
+COPY magma/binutils /targets/binutils
+COPY magma/unibench /targets/unibench
+COPY /magma/run.sh /targets/run.sh
+
+

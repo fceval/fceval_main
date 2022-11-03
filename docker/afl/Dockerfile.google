@@ -1,0 +1,23 @@
+FROM fuzzer-system:afl
+
+ENV CC=clang CXX=clang++
+
+WORKDIR  /work
+# build fuzzer-test-suite
+#RUN wget http://releases.llvm.org/9.0.0/compiler-rt-9.0.0.src.tar.xz -O compiler-rt.tar.xz && ls -lah && tar xfv compiler-rt.tar.xz
+RUN apt-get update && apt-get install -y libarchive-dev libxml2-dev libgcrypt-dev libssl-dev libbz2-dev liblzma-dev libvorbis-dev libogg-dev  nasm autoconf-archive lcov subversion zlib1g-dev libdbus-1-dev pkg-config
+# && git clone https://github.com/google/fuzzer-test-suite.git && cd fuzzer-test-suite && git checkout b2e885706d6
+
+COPY google-cxxflags.patch fuzzer-test-suite/
+COPY build.sh fuzzer-test-suite/build.sh
+RUN mkdir build-test-suite && mkdir build-test-suite-noasan && cd fuzzer-test-suite && git apply google-cxxflags.patch
+#COPY build_fuzzer_test_suite.py build-test-suite/build_fuzzer_test_suite.py
+#RUN cd build-test-suite  && AFL_USE_ASAN=1 python build_fuzzer_test_suite.py
+COPY build_fuzzer_test_suite.py build-test-suite-noasan/build_fuzzer_test_suite.py
+RUN cd build-test-suite-noasan && python build_fuzzer_test_suite.py
+#RUN mkdir -p /targets/afl-google/asan && find build-test-suite -name "*-afl" -executable | xargs cp -t  /targets/afl-google/asan/ && find build-test-suite-noasan -name "*-afl" -executable | xargs cp -t  /targets/afl-google/
+RUN mkdir -p /targets/afl-google/asan &&  find build-test-suite-noasan -name "*-afl" -executable | xargs cp -t  /targets/afl-google/
+#RUN apt-get install -y rsync && rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-noasan/RUNDIR-* /targets/afl-google  && rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite/RUNDIR-* /targets/afl-google/asan
+
+# "${i%-afl}" delete -afl from string i
+RUN apt-get install -y rsync && rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-noasan/RUNDIR-* /targets/afl-google &&  cd /targets/afl-google && for i in *-afl;do mv "$i" "${i%-afl}" ;done

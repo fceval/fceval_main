@@ -1,0 +1,16 @@
+FROM fuzzer-system:parmesan
+
+
+
+# build binutils 
+WORKDIR  /work
+RUN mkdir -p /targets/parmesan-putone/bcfirst && mkdir -p /targets/parmesan-putone/full  &&  apt-get update && apt-get install -y zip flex bison
+COPY build_putone.sh build_putone.sh
+RUN FORCE_UNSAFE_CONFIGURE=1 ./build_putone.sh
+
+WORKDIR  /work/parmesan
+RUN ./misc/build_putone.sh
+
+COPY  --from=fuzzer-afl /targets/putone /targets/parmesan-putone/afl
+
+

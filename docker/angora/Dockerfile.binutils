@@ -1,0 +1,25 @@
+FROM fuzzer-system:angora
+
+ENV CC=/angora/bin/angora-clang CXX=/angora/bin/angora-clang++ 
+
+# build binutils 
+WORKDIR  /work
+RUN mkdir -p /targets/angora-binutils/afl && mkdir -p /targets/angora-binutils/fast && mkdir -p /targets/angora-binutils/track
+
+ 
+RUN wget --no-check-certificate https://ftp.gnu.org/gnu/binutils/binutils-2.26.1.tar.gz && tar xfv binutils-2.26.1.tar.gz && cp -r binutils-2.26.1 afl-binutils-2.26.1 && cd binutils-2.26.1/ && ./configure --prefix=/targets/angora-binutils/fast/ && make -j`nproc` && make install && make clean
+
+
+ENV CC=/angora/bin/angora-clang CXX=/angora/bin/angora-clang++ USE_TRACK=1 
+#  ANGORA_TAINT_RULE_LIST=/tmp/abilist.txt
+RUN cd binutils-2.26.1/ && ./configure --prefix=/targets/angora-binutils/track/ && make -j`nproc` && make install && make clean
+RUN unset USE_TRACK ANGORA_TAINT_RULE_LIST CC CXX
+
+
+COPY  --from=fuzzer-afl /targets/binutils /targets/angora-binutils/afl
+
+
+
+
+
+

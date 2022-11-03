@@ -1,0 +1,12 @@
+FROM fuzzer-system:libfuzzer
+
+WORKDIR /work
+
+ENV CC=clang CXX=clang++
+
+# build fuzzer-test-suite
+RUN rm -rf fuzzer-test-suite && mkdir build-test-suite
+# && git clone https://github.com/google/fuzzer-test-suite.git && cd fuzzer-test-suite && git checkout b2e885706d6
+COPY build.sh fuzzer-test-suite/build.sh
+COPY build_fuzzer_test_suite.py build-test-suite/build_fuzzer_test_suite.py
+RUN mkdir /targets/google && cd build-test-suite  && python3 build_fuzzer_test_suite.py parallel && rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC RUNDIR-* /targets/google

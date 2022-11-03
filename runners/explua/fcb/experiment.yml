@@ -1,0 +1,25 @@
+fuzzers:
+  - name: 'aflplusplus'
+    type:  1    
+  - name: 'afl'
+    type:  2   
+  - name: 'aflfast'
+    type:  3  
+  - name: 'fairfuzz'
+    type:  4 
+
+targets:
+  - name: 'lua'
+    binary: 'lua'
+    input: 'seeds/magma/lua'
+        
+experiment:
+    name: 'expfcblua'
+    timeout: 600
+    repeat: 5
+    output: 'out1'
+    use_collab: true
+    scheduler: 'casefc'
+    experiment_id: 1
+
+   

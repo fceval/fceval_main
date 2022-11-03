@@ -1,0 +1,40 @@
+FROM fuzzer-system:angora
+
+ENV CC=clang CXX=clang++
+
+WORKDIR  /work
+# build fuzzer-test-suite
+
+COPY compiler-rt-11.1.0.src.tar.xz compiler-rt-11.1.0.src.tar.xz
+RUN tar xvf compiler-rt-11.1.0.src.tar.xz && apt-get update &&  apt-get install -y rsync libarchive-dev  libbz2-dev libxml2-dev libssl-dev liblzma-dev nasm  libgcrypt-dev libbfd-dev libunwind-dev binutils-dev git libtool libtool-bin automake bison libglib2.0-dev python python-pip curl libc-ares-dev libfreetype6-dev libarchive-dev ragel bzip2 libgss-dev subversion libgcrypt-dev autoconf-archive virtualenv libdbus-glib-1-dev libgirepository1.0-dev libturbojpeg libssh-dev libssl-dev nasm libbz2-dev libxml2-dev software-properties-common libacl1-dev liblzma-dev && git clone https://github.com/google/fuzzer-test-suite.git && cd fuzzer-test-suite && git checkout b2e885706d6
+ 
+
+COPY google-cxxflags.patch fuzzer-test-suite/
+COPY  build.sh fuzzer-test-suite/build.sh
+RUN  cd fuzzer-test-suite && git apply google-cxxflags.patch 
+RUN cp -rf fuzzer-test-suite fuzzer-test-suite-track
+
+
+
+COPY  --from=fuzzer-afl /targets/google /targets/angora-google/afl
+
+RUN mkdir build-test-suite-fast
+
+COPY build_fuzzer_test_suite_fast.py build-test-suite-fast/build_fuzzer_test_suite_fast.py
+RUN cd build-test-suite-fast && python build_fuzzer_test_suite_fast.py
+RUN mkdir -p /targets/angora-google/fast
+RUN find build-test-suite-fast -name "*-coverage" -executable | xargs cp -t  /targets/angora-google/fast/
+RUN rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-fast/RUNDIR-* /targets/angora-google/fast
+
+RUN ldd /targets/angora-google/fast/*|grep .so|awk '{print $3}'|grep .so|sort|uniq|sed 's#^/lib#/usr/lib#g'|sed 's#\.so.*$#.so#g'|grep -v libgcc_s.so|grep -v libstdc++.so|grep -v libc.so|grep -v libm.so|grep -v libpthread.so|xargs -i /angora/tools/gen_library_abilist.sh '{}' discard >> /tmp/abilist.txt
+
+ENV LD_LIBRARY_PATH=/angora/bin/lib
+RUN mkdir build-test-suite-track
+
+COPY build_fuzzer_test_suite_track.py build-test-suite-track/build_fuzzer_test_suite_track.py
+RUN cd build-test-suite-track && python build_fuzzer_test_suite_track.py
+RUN mkdir -p /targets/angora-google/track && find build-test-suite-track -name "*-coverage" -executable | xargs cp -t  /targets/angora-google/track/
+RUN rsync -avr --exclude=RUNDIR-*/BUILD --exclude=RUNDIR-*/SRC build-test-suite-track/RUNDIR-* /targets/angora-google/track
+RUN unset LD_LIBRARY_PATH
+
+
