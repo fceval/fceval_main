@@ -36,6 +36,9 @@ do
 done
 ```
 
+**Also,you could get the precompiled binaries for fuzzer-benchmark pairs from feval_main_magmabins
+https://drive.google.com/drive/folders/196tBRHKwUTK9-JYYzSYVBsHeEHM8sDDS?usp=sharing
+**
 
 
 # step2, Get Docker images for collaborative fuzzing with fuzzer combinations
