@@ -1,34 +1,11 @@
-All of the projects are tested on Ubuntu 20.04 LTS.
+Misc tools during our development of FCEVAL, which are located at the folder misczxy.
 
-## step1: Docker environment
+angr-dev: install the symbol execution engin angr to get the binary information.
 
-```
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo apt-get -y install docker-compose
-```
+llvm-cfg-to-json: store the CFG in a json file and shown in a png image.
 
-If you want to use Docker as a non-root user, you should consider adding the user to the docker group as follows:
+rmiimages.sh: delete redundant Docker images.
 
-```
-sudo usermod -aG docker your-user
-```
+unifuzz_runner: scripts from UNIFUZZ
 
-## step2:  python virtual environment
-
-sudo apt install python3-virtualenv
-
-sudo apt install virtualenv virtualenvwrapper
-
-virtualenv --python=python3 venv
-
-## step3:  watchdog settings
-
-sudo gedit /etc/sysctl.conf
-
-fs.inotify.max_user_instances=8192
-
-fs.inotify.max_queued_events=524288
-
-fs.inotify.max_user_watches=524288
-
+wandb: visualize the fuzzing status and the information of docker containers.
