@@ -1,0 +1,170 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  aflplusplus-0-exid0:
+    depends_on:
+    - framework-exid0
+    - driver-aflplusplus-0-exid0
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflplusplus-0-exid0
+      OUTPUT_DIR: /data/aflplusplus-0-exid0
+    image: fuzzer-aflplusplus-libpng
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/libpng:/in
+  angora-0-exid0:
+    depends_on:
+    - framework-exid0
+    - driver-angora-0-exid0
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: angora-0-exid0
+      OUTPUT_DIR: /data/angora-0-exid0
+    image: fuzzer-angora-libpng
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.14
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/libpng:/in
+  driver-aflplusplus-0-exid0:
+    depends_on:
+    - framework-exid0
+    environment:
+      ARG: /targets/magma/libpng/libpng @@
+      FUZZER_NAME: aflplusplus-0-exid0
+      FUZZER_TYPE: aflplusplus
+      OUTPUT_DIR: /data/aflplusplus-0-exid0/
+      URI_CONTROL: tcp://framework-exid0:3001
+      URI_LISTENER: tcp://framework-exid0:3000
+      URI_SCHEDULER: tcp://framework-exid0:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid0
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-angora-0-exid0:
+    depends_on:
+    - framework-exid0
+    environment:
+      ARG: /targets/magma/libpng/libpng @@
+      FUZZER_NAME: angora-0-exid0
+      FUZZER_TYPE: angora
+      OUTPUT_DIR: /data/angora-0-exid0/
+      URI_CONTROL: tcp://framework-exid0:3001
+      URI_LISTENER: tcp://framework-exid0:3000
+      URI_SCHEDULER: tcp://framework-exid0:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid0
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.15
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-mopt-0-exid0:
+    depends_on:
+    - framework-exid0
+    environment:
+      ARG: /targets/magma/libpng/libpng @@
+      FUZZER_NAME: mopt-0-exid0
+      FUZZER_TYPE: mopt
+      OUTPUT_DIR: /data/mopt-0-exid0/
+      URI_CONTROL: tcp://framework-exid0:3001
+      URI_LISTENER: tcp://framework-exid0:3000
+      URI_SCHEDULER: tcp://framework-exid0:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid0
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.17
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-symcc-0-exid0:
+    depends_on:
+    - framework-exid0
+    environment:
+      ARG: /targets/magma/libpng/libpng @@
+      FUZZER_NAME: symcc-0-exid0
+      FUZZER_TYPE: symcc
+      OUTPUT_DIR: /data/symcc-0-exid0/
+      URI_CONTROL: tcp://framework-exid0:3001
+      URI_LISTENER: tcp://framework-exid0:3000
+      URI_SCHEDULER: tcp://framework-exid0:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid0
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.19
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  framework-exid0:
+    environment:
+      ANALYSIS_BIN_DIR: /work/analysis_binaries/libpng.analysis_binaries/
+      ARG: '@@'
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: enfuzz
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/libpng:/in
+  mopt-0-exid0:
+    depends_on:
+    - framework-exid0
+    - driver-mopt-0-exid0
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: mopt-0-exid0
+      OUTPUT_DIR: /data/mopt-0-exid0
+    image: fuzzer-mopt-libpng
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.16
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/libpng:/in
+  symcc-0-exid0:
+    depends_on:
+    - framework-exid0
+    - driver-symcc-0-exid0
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: symcc-0-exid0
+      OUTPUT_DIR: /data/symcc-0-exid0
+    image: fuzzer-symcc-libpng
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.18
+    volumes:
+    - data-vol:/data
+    - ./seeds/magma/libpng:/in
+version: '2'
+volumes:
+  data-vol: {}

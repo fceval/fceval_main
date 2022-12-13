@@ -1,0 +1,170 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  aflplusplus-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-aflplusplus-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflplusplus-0-exid4
+      OUTPUT_DIR: /data/aflplusplus-0-exid4
+    image: fuzzer-aflplusplus-nm
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/binutils/nm:/in
+  angora-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-angora-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: angora-0-exid4
+      OUTPUT_DIR: /data/angora-0-exid4
+    image: fuzzer-angora-nm
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.14
+    volumes:
+    - data-vol:/data
+    - ./seeds/binutils/nm:/in
+  driver-aflplusplus-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/binutils/bin/nm -C @@
+      FUZZER_NAME: aflplusplus-0-exid4
+      FUZZER_TYPE: aflplusplus
+      OUTPUT_DIR: /data/aflplusplus-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-angora-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/binutils/bin/nm -C @@
+      FUZZER_NAME: angora-0-exid4
+      FUZZER_TYPE: angora
+      OUTPUT_DIR: /data/angora-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.15
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-mopt-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/binutils/bin/nm -C @@
+      FUZZER_NAME: mopt-0-exid4
+      FUZZER_TYPE: mopt
+      OUTPUT_DIR: /data/mopt-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.17
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-symcc-0-exid4:
+    depends_on:
+    - framework-exid4
+    environment:
+      ARG: /targets/binutils/bin/nm -C @@
+      FUZZER_NAME: symcc-0-exid4
+      FUZZER_TYPE: symcc
+      OUTPUT_DIR: /data/symcc-0-exid4/
+      URI_CONTROL: tcp://framework-exid4:3001
+      URI_LISTENER: tcp://framework-exid4:3000
+      URI_SCHEDULER: tcp://framework-exid4:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid4
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.19
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  framework-exid4:
+    environment:
+      ANALYSIS_BIN_DIR: /work/analysis_binaries/nm.analysis_binaries/
+      ARG: -C @@
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: enfuzz
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/binutils/nm:/in
+  mopt-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-mopt-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: mopt-0-exid4
+      OUTPUT_DIR: /data/mopt-0-exid4
+    image: fuzzer-mopt-nm
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.16
+    volumes:
+    - data-vol:/data
+    - ./seeds/binutils/nm:/in
+  symcc-0-exid4:
+    depends_on:
+    - framework-exid4
+    - driver-symcc-0-exid4
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: symcc-0-exid4
+      OUTPUT_DIR: /data/symcc-0-exid4
+    image: fuzzer-symcc-nm
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.134.18
+    volumes:
+    - data-vol:/data
+    - ./seeds/binutils/nm:/in
+version: '2'
+volumes:
+  data-vol: {}

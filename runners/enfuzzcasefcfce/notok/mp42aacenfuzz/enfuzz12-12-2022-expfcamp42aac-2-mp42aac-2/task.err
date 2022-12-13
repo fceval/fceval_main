@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-9/zhaoxy/casefs/runners/enfuzzcasefcfce/mp42aacenfuzz/12-12-2022-expfcamp42aac-2-mp42aac-2
+INFO:runner.__main__:zxy father_path /home/rack12-9/zhaoxy/casefs/runners/enfuzzcasefcfce/mp42aacenfuzz
+INFO:runner.__main__:zxy base_name mp42aacenfuzz
+ERROR:runner.__main__:please make sure the parent directory is runners!

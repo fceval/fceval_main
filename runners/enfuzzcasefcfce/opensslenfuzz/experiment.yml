@@ -1,0 +1,25 @@
+fuzzers:
+  - name: 'aflplusplus'
+    type:  1    
+  - name: 'angora'
+    type:  2   
+  - name: 'mopt'
+    type:  3  
+  - name: 'symcc'
+    type:  4 
+
+targets:
+  - name: 'openssl'
+    binary: 'openssl'
+    input: 'seeds/magma/openssl'
+        
+experiment:
+    name: 'expfcaopenssl'
+    timeout: 600
+    repeat: 5
+    output: 'out1'
+    use_collab: true
+    scheduler: 'enfuzz'
+    experiment_id: 0
+
+   

@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-9/zhaoxy/casefs/runners/enfuzzcasefcfce/stripcasefc/13-12-2022-expfcastrip-1-strip-1
+INFO:runner.__main__:zxy father_path /home/rack12-9/zhaoxy/casefs/runners/enfuzzcasefcfce/stripcasefc
+INFO:runner.__main__:zxy base_name stripcasefc
+ERROR:runner.__main__:please make sure the parent directory is runners!

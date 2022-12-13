@@ -197,7 +197,8 @@ SUITEDIREXTRA = {
     # zhaoxy add for putone mp3gain
     "putone-angora-fast": "/targets/putone/fast",
     "putone-angora-track": "/targets/putone/track",
-    
+    "magma-angora-fast": "/targets/magma/{bin}/fast",
+    "magma-angora-track": "/targets/magma/{bin}/track",  
     "LAVA-M-angora-fast": "/targets/lava/fast/{bin}/bin",
     "LAVA-M-angora-track": "/targets/lava/track/{bin}/bin",
 
@@ -352,7 +353,8 @@ FUZZERS = {
        # zhaoxy add for angora 
        # angora_fuzzer -i input -o output -t path/to/taint/program -- path/to/fast/program [argv]
        #"angora": "afl-fuzz {afl_opts} -i {input_dir} -o {output_dir} -S afl-s -- {target_cmd} && angora_fuzzer --sync_afl -A  -i {input_dir} -o {output_dir}  -t {fuzzer_dir_extra}/{target} -- {fuzzer_dir_extra2}/{target_with_param}",
-      "angora": "tmux new -s angora -d && tmux split-window && tmux select-pane -U && afl-fuzz {afl_opts} -i {input_dir} -o {output_dir} -m none -S angora -- {target_cmd} 2147483647 && angora_fuzzer --sync_afl -A  -i {input_dir} -o {output_dir}  -t {fuzzer_dir_extra}/{target} -- {fuzzer_dir_extra2}/{target_with_param}",  
+      #"angora": "tmux new -s angora -d && tmux split-window && tmux select-pane -U && afl-fuzz {afl_opts} -i {input_dir} -o {output_dir} -m none -S angora -- {target_cmd} 2147483647 && angora_fuzzer --sync_afl -A  -i {input_dir} -o {output_dir}  -t {fuzzer_dir_extra}/{target} -- {fuzzer_dir_extra2}/{target_with_param}", 
+      "angora": "rm -rf {output_dir} && angora_fuzzer -M none -i {input_dir} -o {output_dir} -t {fuzzer_dir_extra}/{target} -- {fuzzer_dir_extra2}/{target_with_param}",
        # zhaoxy add for parmesan 
        # /work/parmesan/bin/fuzzer -c ./targets_objdump.pruned.json -i in -o out -t ./objdump.track -s ./objdump.san.fast -- ./objdump.fast -s -d @@"
        #"parmesan": "afl-fuzz {afl_opts} -i {input_dir} -o {output_dir} -S afl-s -- {target_cmd} && /work/parmesan/bin/fuzzer  --sync_afl -A  -c ./targets_{target}.pruned.json -i in -o out -t ./track.{target} -s ./san.fast.{target} -- ./fast.{target_with_param}",

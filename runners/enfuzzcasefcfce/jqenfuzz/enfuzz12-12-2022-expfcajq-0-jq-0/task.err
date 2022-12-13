@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-9/zhaoxy/casefs/runners/enfuzzcasefcfce/jqenfuzz/12-12-2022-expfcajq-0-jq-0
+INFO:runner.__main__:zxy father_path /home/rack12-9/zhaoxy/casefs/runners/enfuzzcasefcfce/jqenfuzz
+INFO:runner.__main__:zxy base_name jqenfuzz
+ERROR:runner.__main__:please make sure the parent directory is runners!

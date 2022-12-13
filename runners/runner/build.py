@@ -40,7 +40,7 @@ def gen_docker_file(base_container, cmd, bpath='.', target_cmd="", pre_cmd=""):
 	rm -rf /entry.sh \
     ;fi	\                
     && mkdir /in && mkdir /out && mkdir /data \
-    && echo "#!/usr/bin/env bash" > /entry.sh && echo "set -Eeuxo pipefail" >> /entry.sh && echo "mkdir -p \$OUTPUT_DIR || true" >> /entry.sh && echo "hostname >> \$OUTPUT_DIR/docker_hostname" >> /entry.sh && echo cd {bpath} >> /entry.sh && echo '{pre_cmd}' >> /entry.sh \
+    && echo "#!/usr/bin/env bash" > /entry.sh && echo "set -Eeuxo pipefail" >> /entry.sh && echo "mkdir -p \$OUTPUT_DIR || true" >> /entry.sh && echo "hostname >> \$OUTPUT_DIR/docker_hostname" >> /entry.sh && echo '{pre_cmd}' >> /entry.sh \
     && echo  '{cmd}' >> /entry.sh && chmod +x /entry.sh
     ENV INPUT_DIR=/in OUTPUT_DIR=/out TIMEOUT=10s AFL_STATSD_TAGS_FLAVOR=dogstatsd AFL_STATSD=1 AFL_STATSD_PORT=9125  AFL_STATSD_HOST="172.24.0.3"
     CMD ["/entry.sh"]

@@ -229,7 +229,7 @@ class AFLWatcher(Watcher):
         # AFL reuses the output directory if it already exists, but creates the
         # directories in it
         logger.debug(f"zxy aflwatcherfasdfasdf {config.output_dir}")
-        fuzzer_dir = config.output_dir / str(config.fuzzer_type)
+        fuzzer_dir = config.output_dir / str(config.fuzzer_type) if str(config.fuzzer_type) != "angora" else config.output_dir
         fuzzer_dir.mkdir(parents=True, exist_ok=True)
         logger.debug(f"zxy aflwatcher {fuzzer_dir}")
         target_directories = (
@@ -581,7 +581,7 @@ def get_watcher(
             or config.fuzzer_type == FuzzerType.RADAMSA
             or config.fuzzer_type == FuzzerType.AFLPPZXY
             or config.fuzzer_type == FuzzerType.AFLPLUSPLUS #zhaoxy add for aflplusplus
-            # or config.fuzzer_type == FuzzerType.ANGORA     # zhaoxy add for angora
+            or config.fuzzer_type == FuzzerType.ANGORA     # zhaoxy add for angora
             # or config.fuzzer_type == FuzzerType.SYMCC      # zhaoxy add for symcc
             # or config.fuzzer_type == FuzzerType.PARMESAN      # zhaoxy add for parmesan
             or config.fuzzer_type == FuzzerType.AFLPLUSPLUS #zhaoxy add for aflplusplus
@@ -593,8 +593,9 @@ def get_watcher(
     #    elif config.fuzzer_type == FuzzerType.ANGORA:
     #        watcher = AngoraWatcher(config, connection)
     elif (
-            config.fuzzer_type == FuzzerType.ANGORA
-            or config.fuzzer_type == FuzzerType.PARMESAN  # zhaoxy add for parmesan
+            #config.fuzzer_type == FuzzerType.ANGORA
+            #or 
+            config.fuzzer_type == FuzzerType.PARMESAN  # zhaoxy add for parmesan
     ):
         assert id_dicts is not None
         watcher = AFLAngoraWatcher(config, connection, id_dicts, str("afl-s"))
