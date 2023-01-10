@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/libpngenfuzz/08-01-2023-expfcalibpng-3-libpng-3
+INFO:runner.__main__:zxy father_path /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/libpngenfuzz
+INFO:runner.__main__:zxy base_name libpngenfuzz
+ERROR:runner.__main__:please make sure the parent directory is runners!

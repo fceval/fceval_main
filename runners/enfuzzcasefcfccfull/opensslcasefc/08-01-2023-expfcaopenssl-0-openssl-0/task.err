@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/opensslcasefc/08-01-2023-expfcaopenssl-0-openssl-0
+INFO:runner.__main__:zxy father_path /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/opensslcasefc
+INFO:runner.__main__:zxy base_name opensslcasefc
+ERROR:runner.__main__:please make sure the parent directory is runners!

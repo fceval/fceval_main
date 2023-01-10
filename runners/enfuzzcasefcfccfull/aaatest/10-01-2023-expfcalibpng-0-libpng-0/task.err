@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/aaatest/10-01-2023-expfcalibpng-0-libpng-0
+INFO:runner.__main__:zxy father_path /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/aaatest
+INFO:runner.__main__:zxy base_name aaatest
+ERROR:runner.__main__:please make sure the parent directory is runners!

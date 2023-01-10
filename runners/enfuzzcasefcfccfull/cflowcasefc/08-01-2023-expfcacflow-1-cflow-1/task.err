@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/cflowcasefc/08-01-2023-expfcacflow-1-cflow-1
+INFO:runner.__main__:zxy father_path /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/cflowcasefc
+INFO:runner.__main__:zxy base_name cflowcasefc
+ERROR:runner.__main__:please make sure the parent directory is runners!

@@ -1,0 +1,20 @@
+fuzzers:  
+  - name: 'parmesan'
+    type:  2   
+
+
+targets:
+  - name: 'strip'
+    binary: 'strip'
+    input: 'seeds/binutils/strip'
+        
+experiment:
+    name: 'expfcastrip'
+    timeout: 600
+    repeat: 1
+    output: 'out1'
+    use_collab: true
+    scheduler: 'casefc'
+    experiment_id: 0
+
+   

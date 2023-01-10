@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/luacasefc/08-01-2023-expfcalua-4-lua-4
+INFO:runner.__main__:zxy father_path /home/rack12-10/zhaoxy/casefs/runners/enfuzzcasefcfccfull/luacasefc
+INFO:runner.__main__:zxy base_name luacasefc
+ERROR:runner.__main__:please make sure the parent directory is runners!

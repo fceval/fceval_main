@@ -1,0 +1,25 @@
+fuzzers:
+  - name: 'aflplusplus'
+    type:  1    
+  - name: 'parmesan'
+    type:  2   
+  - name: 'radamsa'
+    type:  3  
+  - name: 'symcc'
+    type:  4  
+           
+targets:
+  - name: 'strip'
+    binary: 'strip'
+    input: 'seeds/binutils/strip'
+        
+experiment:
+    name: 'expfcastrip'
+    timeout: 600
+    repeat: 5
+    output: 'out1'
+    use_collab: true
+    scheduler: 'casefc'
+    experiment_id: 0
+
+   
