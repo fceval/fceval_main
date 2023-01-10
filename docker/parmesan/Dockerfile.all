@@ -1,30 +1,7 @@
-#FROM fuzzer-system:parmesan
 FROM magma/parmesan/libpng
-#RUN apt-get update && apt-get install -y tmux
 ENV DEBIAN_FRONTEND=noninteractive PATH=/work/afl:/work/parmesan/bin:/work/parmesan:$PATH
-COPY --from=fuzzer-parmesan:binutils /targets/parmesan-binutils/afl /targets/binutils/
-COPY --from=fuzzer-parmesan:binutils /targets/parmesan-binutils/full /targets/binutils/parmesan/
-#COPY --from=fuzzer-parmesan:lava /targets/parmesan-lava/afl /targets/lava/
-#COPY --from=fuzzer-parmesan:lava /targets/parmesan-lava/full /targets/lava/parmesan/
-#COPY --from=fuzzer-parmesan:google /targets/parmesan-google/afl /targets/google/
-#COPY --from=fuzzer-parmesan:google /targets/parmesan-google/full /targets/google/parmesan/
-#COPY --from=fuzzer-parmesan:unibench /targets/parmesan-unibench/afl /targets/unibench/
-#COPY --from=fuzzer-parmesan:unibench /targets/parmesan-unibench/full /targets/unibench/parmesan/
 
-#COPY --from=fuzzer-parmesan:putone /targets/parmesan-putone/afl /targets/putone/
-#COPY --from=fuzzer-parmesan:putone /targets/parmesan-putone/full /targets/putone/parmesan/
-
-COPY --from=fuzzer-parmesan:magma /targets/parmesan-magma/full /targets/magma/parmesan/
- 
-
-
-#COPY magma /targets/magma
-COPY magma/run.sh /targets/run.sh
-#COPY magma/run.sh /targets/temp.sh
 WORKDIR /work
-#RUN rm -rf /work/parmesan
-#RUN mkdir parmesan && cp -Rf /magma/fuzzers/parmesan/repo/bin /work/parmesan
-#RUN rm -rf putone && rm -rf unibench && rm -f afl-2.56b.tar.gz && rm -f aflplusplus_3.11c.tar.gz && rm -f binutils-2.31.1.tar.gz && rm -f binutils-2.31.1.tar.gz && rm -f lava_corpus.tar.xz && rm -rf afl
 
 #for libsndfile
 RUN apt-get update && apt-get install -y  libasound2-dev libflac-dev libogg-dev libtool libvorbis-dev libopus-dev libmp3lame-dev libmpg123-dev
@@ -34,3 +11,8 @@ RUN apt-get update && apt-get install -y nasm zlib1g-dev liblzma-dev libjpeg-tur
     
 #for lua
 RUN apt-get update && apt-get install -y libreadline-dev
+
+COPY magma/magma /targets/magma
+COPY magma/binutils /targets/binutils
+COPY magma/unibench /targets/unibench
+COPY magma/run.sh /targets/run.sh

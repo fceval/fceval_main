@@ -210,8 +210,9 @@ SUITEDIREXTRA = {
     "fuzzbench-symcc-symcc": "/targets/fuzzbench/symcc",
     #zhaoxy add for magma
     "magma-symcc-symcc": "/targets/magma/{bin}/symcc",
-    "binutils-parmesan-parmesan": "/targets/binutils/parmesan",
+    "binutils-parmesan-parmesan": "/targets/binutils",
     "magma-parmesan-parmesan": "/targets/magma/{bin}",
+    "unibench-parmesan-parmesan": "/targets/unibench",   
     "magma-aflplusplus-cmplog": "/targets/magma/{bin}/cmplog",
     "binutils-aflplusplus-cmplog": "/targets/binutils/cmplog/bin",
     "unibench-aflplusplus-cmplog": "/targets/unibench/cmplog",    
@@ -362,7 +363,7 @@ FUZZERS = {
 	#zhaoxy add for magma: only use track/fast bin with targets.json with out prune
        #"parmesan": "tmux new -s parmesan -d && tmux split-window && tmux select-pane -U && afl-fuzz {afl_opts} -i {input_dir} -o {output_dir} -m none -S parmesan -- {target_cmd} 2147483647 && tmux select-pane -D &&  /work/parmesan/bin/fuzzer  --sync_afl -A  -c ./targets_{target}.pruned.json -i {input_dir} -o {output_dir}  -t ./track.{target} -s ./san.fast.{target} -- ./fast.{target_with_param}",
        #"parmesan": "tmux new -s parmesan -d && tmux split-window && tmux select-pane -U && afl-fuzz {afl_opts} -i {input_dir} -o {output_dir} -m none -S parmesan -- {target_cmd} 2147483647 && tmux select-pane -D &&  /work/parmesan/bin/fuzzer  --sync_afl -A  -c ./targets_{target}.json -i {input_dir} -o {output_dir}  -t ./track.{target} -- ./fast.{target_with_param}", 
-       "parmesan": 'chmod a+x /targets/run.sh && export AFL_OPTS="{afl_opts}" && export TARGET_CMD="{target_cmd}" && export TARGET_JSON="{fuzzer_dir_extra}/targets_{target}.json"  && export TRACK_BIN="{fuzzer_dir_extra}/track.{target}" && export PARMESAN_CMD="{fuzzer_dir_extra}/fast.{target_with_param}" && /targets/run.sh',          
+       "parmesan": 'chmod a+x /targets/run.sh && export AFL_OPTS="{afl_opts}" && export TARGET_CMD="{target_cmd}" && export TARGET_JSON="{fuzzer_dir_extra}/{target}-targets.json"  && export TRACK_BIN="{fuzzer_dir_extra}/track.{target}" && export PARMESAN_CMD="{fuzzer_dir_extra}/fast.{target_with_param}" && /targets/run.sh',          
        # zhaoxy add for symcc https://github.com/julihoh/libafl_symcc/blob/main/docs/Fuzzing.txt 
        #"symcc": "afl-fuzz {afl_opts}  -M afl-master -i {input_dir} -o {output_dir}  -m none -- {target_cmd} && afl-fuzz {afl_opts}  -S afl-secondary -i {input_dir} -o {output_dir}  -m none -- {target_cmd} && symcc_fuzzing_helper -o {output_dir} -a afl-secondary -n symcc -- {target_cmd}",
        #"symcc": "tmux new -s symcc -d && tmux split-window && tmux select-pane -U && afl-fuzz {afl_opts}  -S symcc -i {input_dir} -o {output_dir}  -m none -- {target_cmd} && tmux select-pane -D && symcc_fuzzing_helper -o {output_dir} -a symcc -n symcc -- {fuzzer_dir_extra}/{target_with_param}",

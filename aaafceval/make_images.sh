@@ -5,10 +5,10 @@ set -e
 #cd /home/kakaxdu/collabfuzzzxy
 #source venvnew/bin/activate
 
-#fuzzers=("afl" "aflplusplus" "aflfast" "fairfuzz" "qsym" "radamsa" "honggfuzz" "libfuzzer" "radamsa" "parmesan" "symcc")
-fuzzers=("afl" "aflplusplus" "aflfast" "fairfuzz" "mopt" "symcc")
+#fuzzers=("afl" "aflplusplus" "aflfast" "fairfuzz" "qsym" "radamsa" "honggfuzz" "libfuzzer" "radamsa" "parmesan" "symcc" "mopt")
+fuzzers=("aflplusplus" "radamsa" "parmesan" "symcc")
 #bms=("ld" "nm" "objdump" "readelf" "libpng" "size" "libtiff" "libxml2" "lua" "openssl")
-bms=("ld" "nm" "objdump" "readelf"  "libpng"  "libxml2" "openssl" "lua"  "cflow" "jq" "imginfo" "mp42aac")
+bms=("nm" "objdump" "readelf"  "libpng"  "libxml2" "openssl" "lua"  "cflow" "jq" "size" "strings" "strip")
 cur_dir=$(pwd)
 for fuzzer in ${fuzzers[@]}
 do
