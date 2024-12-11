@@ -1,0 +1,4 @@
+INFO:runner.__main__:zxy pwd /home/kakaxdu/aaadev/casefs/runners/expunibench/fcb/02-08-2022-expfcbcflow-20-cflow-0
+INFO:runner.__main__:zxy father_path /home/kakaxdu/aaadev/casefs/runners/expunibench/fcb
+INFO:runner.__main__:zxy base_name fcb
+ERROR:runner.__main__:please make sure the parent directory is runners!

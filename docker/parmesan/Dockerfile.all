@@ -1,0 +1,18 @@
+FROM magma/parmesan/libpng
+ENV DEBIAN_FRONTEND=noninteractive PATH=/work/afl:/work/parmesan/bin:/work/parmesan:$PATH
+
+WORKDIR /work
+
+#for libsndfile
+RUN apt-get update && apt-get install -y  libasound2-dev libflac-dev libogg-dev libtool libvorbis-dev libopus-dev libmp3lame-dev libmpg123-dev
+    
+#for libtiff
+RUN apt-get update && apt-get install -y nasm zlib1g-dev liblzma-dev libjpeg-turbo8-dev
+    
+#for lua
+RUN apt-get update && apt-get install -y libreadline-dev
+
+COPY magma/magma /targets/magma
+COPY magma/binutils /targets/binutils
+COPY magma/unibench /targets/unibench
+COPY magma/run.sh /targets/run.sh

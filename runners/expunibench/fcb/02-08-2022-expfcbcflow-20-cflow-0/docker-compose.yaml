@@ -1,0 +1,170 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  afl-0-exid20:
+    depends_on:
+    - framework-exid20
+    - driver-afl-0-exid20
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: afl-0-exid20
+      OUTPUT_DIR: /data/afl-0-exid20
+    image: fuzzer-afl-cflow
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.14
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/cflow:/in
+  aflfast-0-exid20:
+    depends_on:
+    - framework-exid20
+    - driver-aflfast-0-exid20
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflfast-0-exid20
+      OUTPUT_DIR: /data/aflfast-0-exid20
+    image: fuzzer-aflfast-cflow
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.16
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/cflow:/in
+  aflplusplus-0-exid20:
+    depends_on:
+    - framework-exid20
+    - driver-aflplusplus-0-exid20
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: aflplusplus-0-exid20
+      OUTPUT_DIR: /data/aflplusplus-0-exid20
+    image: fuzzer-aflplusplus-cflow
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/cflow:/in
+  driver-afl-0-exid20:
+    depends_on:
+    - framework-exid20
+    environment:
+      ARG: /targets/unibench/cflow @@
+      FUZZER_NAME: afl-0-exid20
+      FUZZER_TYPE: afl
+      OUTPUT_DIR: /data/afl-0-exid20/
+      URI_CONTROL: tcp://framework-exid20:3001
+      URI_LISTENER: tcp://framework-exid20:3000
+      URI_SCHEDULER: tcp://framework-exid20:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid20
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.15
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-aflfast-0-exid20:
+    depends_on:
+    - framework-exid20
+    environment:
+      ARG: /targets/unibench/cflow @@
+      FUZZER_NAME: aflfast-0-exid20
+      FUZZER_TYPE: aflfast
+      OUTPUT_DIR: /data/aflfast-0-exid20/
+      URI_CONTROL: tcp://framework-exid20:3001
+      URI_LISTENER: tcp://framework-exid20:3000
+      URI_SCHEDULER: tcp://framework-exid20:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid20
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.17
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-aflplusplus-0-exid20:
+    depends_on:
+    - framework-exid20
+    environment:
+      ARG: /targets/unibench/cflow @@
+      FUZZER_NAME: aflplusplus-0-exid20
+      FUZZER_TYPE: aflplusplus
+      OUTPUT_DIR: /data/aflplusplus-0-exid20/
+      URI_CONTROL: tcp://framework-exid20:3001
+      URI_LISTENER: tcp://framework-exid20:3000
+      URI_SCHEDULER: tcp://framework-exid20:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid20
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  driver-fairfuzz-0-exid20:
+    depends_on:
+    - framework-exid20
+    environment:
+      ARG: /targets/unibench/cflow @@
+      FUZZER_NAME: fairfuzz-0-exid20
+      FUZZER_TYPE: fairfuzz
+      OUTPUT_DIR: /data/fairfuzz-0-exid20/
+      URI_CONTROL: tcp://framework-exid20:3001
+      URI_LISTENER: tcp://framework-exid20:3000
+      URI_SCHEDULER: tcp://framework-exid20:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework-exid20
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.19
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  fairfuzz-0-exid20:
+    depends_on:
+    - framework-exid20
+    - driver-fairfuzz-0-exid20
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: fairfuzz-0-exid20
+      OUTPUT_DIR: /data/fairfuzz-0-exid20
+    image: fuzzer-fairfuzz-cflow
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.18
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/cflow:/in
+  framework-exid20:
+    environment:
+      ANALYSIS_BIN_DIR: /work/analysis_binaries/cflow.analysis_binaries/
+      ARG: '@@'
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: casefc
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.50.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/unibench/cflow:/in
+version: '2'
+volumes:
+  data-vol: {}

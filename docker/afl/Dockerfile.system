@@ -1,0 +1,23 @@
+FROM fuzzer-system
+
+WORKDIR  /work
+#security.ubuntu.com
+#https://mirrors.tuna.tsinghua.edu.cn/ubuntu/
+RUN (sed -i "s/mirrors.aliyun.com/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list && sed -i "s/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list)   && apt-get update && apt-get install -y python2.7-dev build-essential make git wget  && tar xfv afl-2.56b.tar.gz && mv AFL-2.56b afl && cd afl &&  AFL_NO_X86=1 make -j`nproc` CC=clang CXX=clang++  && ./afl-clang --version && make install
+#&& cd llvm_mode  && make -j`nproc` && cd ../ && ls 
+
+#RUN git clone https://github.com/google/AFL.git /afl && \
+#    cd /afl && \
+#    git checkout 61037103ae3722c8060ff7082994836a794f978e && \
+#    AFL_NO_X86=1 make  && make install
+
+RUN wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.1/compiler-rt-12.0.1.src.tar.xz --no-check-certificate && tar xfv compiler-rt-12.0.1.src.tar.xz && cd compiler-rt-12.0.1.src/lib/fuzzer && \
+    bash build.sh && \
+    cp libFuzzer.a /usr/lib && \
+    cp libFuzzer.a /work/
+WORKDIR /work/afldriver
+RUN clang -Wno-pointer-sign -c /work/afl/llvm_mode/afl-llvm-rt.o.c -I/work/afl && \
+    clang++ -stdlib=libc++ -std=c++11 -O2 -c /work/compiler-rt-12.0.1.src/lib/fuzzer/afl/afl_driver.cpp && \
+    ar r /libAFL.a *.o
+
+

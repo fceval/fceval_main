@@ -1,0 +1,12 @@
+FROM fuzzer-system:symcc
+
+
+
+# build binutils 
+WORKDIR  /work
+RUN mkdir -p /targets/symcc-unibench/afl && mkdir -p /targets/symcc-unibench/symcc && apt-get update && apt-get install -y zip flex bison
+COPY build_unibench.sh build_unibench.sh
+RUN FORCE_UNSAFE_CONFIGURE=1 ./build_unibench.sh
+
+COPY  --from=fuzzer-afl /targets/unibench/asan /targets/symcc-unibench/afl
+

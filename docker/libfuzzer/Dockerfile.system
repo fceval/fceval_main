@@ -1,0 +1,21 @@
+FROM fuzzer-system
+
+WORKDIR /work
+
+RUN apt-get update && apt-get install -y libpixman-1-dev rsync wget git python3.7-dev libpixman-1-dev rsync libarchive-dev libxml2-dev libgcrypt-dev libssl-dev libbz2-dev liblzma-dev libvorbis-dev libogg-dev  nasm autoconf-archive lcov subversion zlib1g-dev libdbus-1-dev pkg-config
+COPY binutils fuzzer-test-suite
+
+
+SHELL ["/bin/bash", "-c"]
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONIOENCODING=utf8 \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8
+    
+
+ENV CC=clang CXX=clang++
+
+
+
+

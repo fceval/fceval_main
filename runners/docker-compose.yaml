@@ -1,0 +1,62 @@
+networks:
+  network_statsd_zxy:
+    external:
+      name: statsdserver_network_statsd_zxy
+services:
+  afl-0:
+    depends_on:
+    - framework
+    - driver-afl-0
+    environment:
+      AFL_NO_AFFINITY: '1'
+      AFL_STATSD_FUZZER_BANNER: afl-0
+      OUTPUT_DIR: /data/afl-0
+    image: fuzzer-afl-file_magic
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.0.12
+    volumes:
+    - data-vol:/data
+    - ./seeds/putone/file_magic:/in
+  driver-afl-0:
+    depends_on:
+    - framework
+    environment:
+      ARG: /targets/putone/file_magic @@
+      FUZZER_NAME: afl-0
+      FUZZER_TYPE: afl
+      OUTPUT_DIR: /data/afl-0/
+      URI_CONTROL: tcp://framework:3001
+      URI_LISTENER: tcp://framework:3000
+      URI_SCHEDULER: tcp://framework:3002
+    image: fuzzer-generic-driver
+    links:
+    - framework
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.0.13
+    pid: host
+    volumes:
+    - data-vol:/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  framework:
+    environment:
+      ANALYSIS_BIN_DIR: /home/coll/analysis_binaries/file_magic.analysis_binaries/
+      ARG: '@@'
+      INPUT_DIR: /in
+      OUTPUT_DIR: /data/collab/out
+      RUST_LOG: debug
+      SCHEDULER: htfuzzzxy
+      URI_CONTROL: tcp://*:3001
+      URI_LISTENER: tcp://*:3000
+      URI_SCHEDULER: tcp://*:3002
+    image: fuzzer-framework-all
+    networks:
+      network_statsd_zxy:
+        ipv4_address: 172.24.0.5
+    volumes:
+    - data-vol:/data
+    - ./seeds/putone/file_magic:/in
+version: '2'
+volumes:
+  data-vol: {}

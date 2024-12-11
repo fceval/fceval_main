@@ -1,0 +1,19 @@
+--- 
+targets: 
+  - 
+    binary: objdump
+    name: objdump
+    input: ./inputs
+
+
+experiment: 
+  name: "test_run"
+  timeout: 10
+  repeat: 10
+  output: ./out/test
+  use_collab: true
+fuzzers: 
+  - 
+    name: afl
+    type: afl
+    parallel: 2

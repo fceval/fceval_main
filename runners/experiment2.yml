@@ -1,0 +1,17 @@
+fuzzers:
+  - name: 'aflplusplus'
+    type:  2 
+targets:
+  - name: 'objdump'
+    binary: 'objdump'
+    input: 'seeds/binutils/objdump'
+
+experiment:
+    name: 'experiment2'
+    timeout: 3600
+    repeat: 4
+    output: 'out2'
+    use_collab: true
+    scheduler: 'htfuzzzxy'
+
+   

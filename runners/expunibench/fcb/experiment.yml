@@ -1,0 +1,25 @@
+fuzzers:
+  - name: 'aflplusplus'
+    type:  1    
+  - name: 'afl'
+    type:  2   
+  - name: 'aflfast'
+    type:  3  
+  - name: 'fairfuzz'
+    type:  4 
+
+targets:
+  - name: 'cflow'
+    binary: 'cflow'
+    input: 'seeds/binutils/cflow'
+        
+experiment:
+    name: 'expfcbcflow'
+    timeout: 600
+    repeat: 1
+    output: 'out1'
+    use_collab: true
+    scheduler: 'casefc'
+    experiment_id: 1
+
+   

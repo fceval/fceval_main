@@ -1,0 +1,13 @@
+FROM magma/angora/libpng
+RUN export DEBIAN_FRONTEND=noninteractive   && apt-get update  && apt-get install -y tzdata && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime  && dpkg-reconfigure --frontend noninteractive tzdata
+RUN apt-get update && apt-get install -y tmux  libasound2-dev libflac-dev libogg-dev libtool libvorbis-dev libopus-dev libmp3lame-dev libmpg123-dev nasm zlib1g-dev liblzma-dev libjpeg-turbo8-dev libreadline-dev 
+
+ENV ANGORA_DISABLE_CPU_BINDING=1 DEBIAN_FRONTEND=noninteractive PATH=/magma/fuzzers/angora/repo:/magma/fuzzers/angora/repo/bin:/magma/fuzzers/angora/repo/llvm_install/clang+llvm/bin:$PATH
+
+
+COPY magma /targets/magma
+COPY magma/binutils /targets/binutils
+COPY magma/unibench /targets/unibench
+COPY /magma/run.sh /targets/run.sh
+
+

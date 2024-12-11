@@ -1,0 +1,12 @@
+FROM fuzzer-system:fairfuzz
+#rm /work for reduce the size of images
+RUN apt-get update && apt-get install -y python2.7-dev libarchive-dev libglib2.0 libgss3 && rm -rf /work
+
+COPY --from=fuzzer-afl:binutils  /targets/afl-binutils /targets/binutils 
+COPY --from=fuzzer-afl:lava  /targets/afl-lava /targets/lava
+COPY --from=fuzzer-afl:google  /targets/afl-google /targets/google
+COPY --from=fuzzer-afl:unibench  /targets/afl-unibench /targets/unibench
+COPY --from=fuzzer-afl:putone  /targets/afl-putone /targets/putone
+
+ENV DEBIAN_FRONTEND=noninteractive
+
