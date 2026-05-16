@@ -1,4 +1,4 @@
-**This is the main project with source codes for FCEVAL . [paper link](https://authors.elsevier.com/a/1hIyd_3pcoW3be)**
+**This is the main project with source codes for FCEVAL. [paper link](https://www.sciencedirect.com/science/article/abs/pii/S016740482300264X)**
 
 **FCEVAL is an effective,fair,comprehensive quantified and easy-to-use evaluator for fuzzer combinations, which extends the collaborative framework [COLLABFUZZ](https://github.com/vusec/collabfuzz)  to run fuzzer combinations and extends Ground-truth benchmark for fuzzing [Magma](https://github.com/HexHive/magma) for adapting fuzzers to benchmarks.**
 
